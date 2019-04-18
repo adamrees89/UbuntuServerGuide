@@ -1,0 +1,61 @@
+\chapter{Zone Minder}
+\label{chp:zm}
+
+\begin{lstlisting}
+sudo apt-get install tasksel
+
+sudo tasksel
+\end{lstlisting}
+
+In the prompt select LAMP server, this will install Apache (Chapter \ref{apache}), MySQL (Chapter \ref{chp:mysql}), and PHP (Sometimes installed by default).
+
+Now choose a password for the MySQL server.
+
+Now update/upgrade, then install zoneminder:
+
+\begin{lstlisting}
+sudo apt-get install zoneminder
+\end{lstlisting}
+
+Now we must add a delay so that MySQL can start before zoneminder:
+
+\begin{lstlisting}
+sudo nano /etc/init.d/zoneminder
+\end{lstlisting}
+
+then add the following above $zmfix -a$:
+
+\begin{verbatim}
+sleep 15
+\end{verbatim}
+
+Now fix a problem in the config file:
+
+\begin{lstlisting}
+sudo nano /etc/zm/zm.conf
+\end{lstlisting}
+
+and add the following:
+
+\begin{verbatim}
+ZM_VERSION=1.26.5
+\end{verbatim}
+
+Now link apache to zoneminder:
+
+\begin{lstlisting}
+ln -s /etc/zm/apache.conf /etc/apache2/conf-enabled/zoneminder.conf
+\end{lstlisting}
+
+restart apache
+
+\begin{lstlisting}
+sudo service apache2 restart
+\end{lstlisting}
+
+Now we need to install Cambozola
+
+\begin{lstlisting}
+sudo wget www.zoneminder.com/sites/zoneminder.com/downloads/cambozola.jar -O /usr/share/zoneminder/cambozola.jar
+\end{lstlisting}
+

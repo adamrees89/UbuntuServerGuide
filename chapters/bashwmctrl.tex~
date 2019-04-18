@@ -1,0 +1,26 @@
+\chapter{Bash Window Control}
+\label{app:wmctrl}
+
+\begin{lstlisting}
+#! /bin/bash
+
+while true; do
+	#Open PDF
+	evince /home/adam/Desktop/Thesis.pdf &
+	#Grab the PID so we can close it later
+	pid="$!"
+	#Sleep for 1.5s to allow the pdf to open
+	sleep 0.5s
+	#Get the X name of the window
+	name=$(wmctrl -lp | awk -vpid="$pid" '$3==pid{print $1}')
+	#Position the window
+	wmctrl -ir "$name" -e 1,1,1,1280,1024
+	#Wait for 5 minutes
+	sleep 5m
+	#Kill the program
+	kill "$pid"
+	#Echo the time the program was last closed for sanity checking
+	T=$(date +"%T")
+	echo $T
+done
+\end{lstlisting}

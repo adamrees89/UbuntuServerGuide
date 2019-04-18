@@ -1,0 +1,131 @@
+\chapter{Messages}
+\label{chp:messages}
+
+In this chapter all the messaging systems built into ubuntu will be detailed.
+
+\section{System Internal Messages}
+
+There is a way to send messages to anyone logged in, this can be the contents of a file, or simply what you type.  See below for the different options;
+
+\begin{lstlisting}
+echo "Your text here" | wall
+\end{lstlisting}
+
+This command takes any standard output, for example echo, and then pipes it through the wall command to broadcast to all users.
+
+\begin{lstlisting}
+write USER tty1
+\end{lstlisting}
+
+Where as this command will connect to a user and display your messages to them.  It will start an environment where anything you type will be available to view by the other user.  However you do need to know where that other user will be connected we can find out all the required information by typing the following command;
+
+\begin{lstlisting}
+w USERNAME
+\end{lstlisting}
+
+\section{System Mail}
+
+Sometimes you'll log into one of the TTY's and see that you have mail just after you log in.  Lets read it;
+
+Install mailutils;
+
+\begin{lstlisting}
+sudo apt-get install mailutils --yes
+\end{lstlisting}
+
+Then to read the mail type;
+
+\begin{lstlisting}
+mail
+\end{lstlisting}
+
+Now to read mail, simply hit \keys{\enter}.  Deleting the mail simply involves typing \keys{d} and \keys{enter}.
+
+To delete all the mail in the inbox, you can simply type;
+
+\begin{lstlisting}
+delete 1-115
+\end{lstlisting}
+
+Where it will delete mails 1 through 115.
+
+\vspace*{0.5cm}
+\begin{minipage}{0.3\textwidth}
+\begin{flushleft} 
+\includegraphics[width=0.9\textwidth]{./supportfiles/point.jpg}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\begin{flushright}
+\hrule
+\vspace*{0.25cm}
+\textit{For more help please read: \url{http://mailutils.org/manual/html_node/Reading-Mail.html}}
+\vspace{0.25cm}
+\hrule
+\end{flushright}
+\end{minipage}
+\vspace*{0.5cm}
+
+
+
+\subsection{Stopping Automatic Mail}
+
+Most of the mail that you'll get is outputs from cronjobs, to stop this simply append the following to the line in crontab;
+
+\begin{verbatim}
+>/dev/null 2>&1
+\end{verbatim}
+
+So an example crontab command with suppressed output would be;
+
+\begin{lstlisting}
+@reboot ~/scripts/ent >/dev/null 2>&1
+\end{lstlisting}
+
+\section{Sending an internal mail}
+
+To send an email to another user (or to yourself from a script) we simply use the following command;
+
+\begin{lstlisting}
+echo "Some Mail body" | mail -s "A Subject" [USERNAME]
+\end{lstlisting}
+
+Or if there is a lot of text to write you can do it interactively by using;
+
+\begin{lstlisting}
+mail -s "Some Subject" [USERNAME]
+\end{lstlisting}
+
+Then type your message in the whitespace below.  when you are finished press \keys{Ctrl+D}.
+
+\section{Email to another computer}
+\label{sec:ssmtp}
+
+So we can configure the server to email us if anything is wrong, or if some event happens.  To do this we need to install \textbf{ssmtp} which is a \textit{Mail Transfer Agent} (MTA).
+
+\begin{lstlisting}
+sudo apt-get update
+sudo apt-get install ssmtp
+\end{lstlisting}
+
+Once it has finished, we now have to configure it.  Type the following:
+
+\begin{lstlisting}
+sudo nano /etc/ssmtp/ssmtp.conf
+\end{lstlisting}
+
+Make the config file look like the one in Appendix~\ref{app:emailconfig}.
+
+Now to send an email we have to type a command followed by text using the following format: \textit{Note the whitespace between Subject and Hello World}
+
+\begin{lstlisting}
+ssmtp recipient_email_address
+\end{lstlisting}
+
+\begin{verbatim}
+To: recipient_email_address
+From: your_email_address
+Subject: subject
+
+Hello World
+\end{verbatim}

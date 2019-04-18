@@ -1,0 +1,12 @@
+\chapter{Fail2Ban Apache Rule}
+\label{app:fail2banRule}
+
+\begin{lstlisting}
+[Definition]
+
+failregex = <HOST>.*"[A-Z]* /(cms|user|muieblackcat|db|cpcommerce|wp-login|joomla|awstatstotals|wp-content|wp-includes|pma|phpmyadmin|myadmin|mysql|mysqladmin|sqladmin|mypma|admin|xampp|mysqldb|pmadb|phpmyadmin1|phpmyadmin2).*"
+            <HOST>.*\" (502|500|417|416|415|414|413|412|404|405|403|401|400)
+
+ignoreregex = .*\"GET \/(press|mailto|domestic|word).*
+
+\end{lstlisting}

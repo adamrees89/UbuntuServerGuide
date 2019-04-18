@@ -1,0 +1,99 @@
+%preamble document set-up
+
+%Package Includes
+
+\usepackage{graphicx}
+\usepackage[top=2.5cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+%\usepackage[toc,nonumberlist]{glossaries}
+%\makeglossary
+\usepackage{todonotes}
+\usepackage{float}
+\usepackage{array}
+\usepackage{pdfpages}
+\usepackage{color, colortbl}
+\usepackage{fancyhdr}
+\usepackage{nameref}
+\usepackage{chemfig}
+\usepackage{listings}
+\lstset{language=bash, numbers=left, frame=single, breaklines=true, numberstyle=\footnotesize}
+\usepackage{framed}
+\usepackage[os=win]{menukeys}
+\usepackage[stamp]{draftwatermark}
+\usepackage{tikz}
+\usetikzlibrary{positioning,decorations.markings}
+
+%Page and Header Styling
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.25pt}
+\fancyhead[L]{\textbf{Adam Rees}}
+\fancyhead[R]{Ubuntu Server Guide}
+\setlength\voffset{0in}
+
+%Watermark
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{4}
+\SetWatermarkLightness{0.8}
+%\SetWatermarkColor{red}
+
+%Document meta-data
+\hypersetup{
+    pdftitle={Servers in Ubuntu},
+    pdfauthor={Adam Rees},
+    pdfsubject={Linux Computing},
+    pdfcreator={Adam Rees},
+    pdfproducer={Latex},
+	pdfstartview={XYZ null null 1.00},
+	pdfcreator={pdflatex}]{hyperref}
+}
+
+            
+           
+    
+
+%Custom Commands
+
+\definecolor{Gray}{gray}{0.90}
+\lstset{language=bash, numbers=left, frame=single, breaklines=true, numberstyle=\footnotesize}
+
+%Include Glossary
+
+%\input{./supportfiles/gloss}
+
+%Tiny Leaves
+
+\newcounter{leafs}
+ 
+\tikzset{%
+leaf/.style={/utils/exec=\setcounter{leafs}{0},
+    decorate,decoration={
+        markings,
+        mark=at position 0 with {
+            \draw [bend left=35,fill=black] (0,0) to ++(-0.3,0.02*\sign) to ++(0.3,-0.02*\sign);},
+        mark=between positions 0.02 and 0.5 step 0.05 with {
+            \draw [bend right=35,fill=black] (0.01*\sign,0.01*\sign) to ++(-0.2-\mult,0.3*\sign+\mult*\sign) to ++(0.2+\mult,-0.3*\sign-\mult*\sign);
+            \stepcounter{leafs};},
+        mark=between positions 0.54 and 0.99 step 0.04875 with {
+            \addtocounter{leafs}{-1}
+            \draw [bend left=35,fill=black] (-0.01*\sign,0.01*\sign) to ++(0.2+\mult,0.3*\sign+\mult*\sign) to ++(-0.2-\mult,-0.3*\sign-\mult*\sign);},
+    }
+}}
+ 
+\newcommand{\leaves}[1]{%
+\setlength{\lineskip}{6pt plus 6pt minus 0pt}\lineskiplimit=\baselineskip
+\def\mult{0.03*\theleafs}
+\begin{tikzpicture}
+    \node [align=center] (box) {\uppercase{#1}};
+    \node [below left=of box] (ll) {};
+    \node [above left=of box] (ul) {};
+    \node [below right=of box] (lr) {};
+    \node [above right=of box] (ur) {};
+    \def\sign{-1}
+    \draw [bend right=45, fill=black,postaction=leaf] (ul) to (ll) to ++(0.1,0.1) to [bend left=45] (ul);
+    \def\sign{1}
+    \draw [bend left=45, fill=black,postaction=leaf] (ur) to (lr) to ++ (-0.1,0.1) to [bend right=45] (ur);
+\end{tikzpicture}
+}

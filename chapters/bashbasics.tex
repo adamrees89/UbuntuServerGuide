@@ -1,0 +1,52 @@
+\chapter{Basics of Bash}
+
+\section{Bash Scripts}
+\label{ssec:bash}
+
+These scripts are really simple to set up, simply open a blank file and type the following;
+
+\begin{lstlisting}
+#!/bin/bash
+
+[Your set of commands here]
+\end{lstlisting}
+
+Now set the file to executable by running the command below to change permissions;
+
+\begin{lstlisting}
+sudo chmod +x [FILE NAME]
+\end{lstlisting}
+
+\subsection{Output}
+
+The messages from a custom script can be output to the to a system log (syslog) using;
+
+\begin{lstlisting}
+logger
+\end{lstlisting}
+
+Usage is simple, to write a line to the $syslog$ file we use;
+
+\begin{lstlisting}
+logger A Message
+\end{lstlisting}
+
+There are other options use;
+
+\begin{lstlisting}
+man logger
+\end{lstlisting}
+
+to see them.
+
+
+
+\chapter{Window Control with Bash}
+
+In appendix~\ref{app:wmctrl} an example of a bash script that can manipulate the positioning of a window can be seen.  This example opens a file every five minutes in the same place every time.
+
+In order to use this script or any of the techniques for setting the window size/position a piece of software called wmctrl is required, run the following as root:
+
+\begin{lstlisting}
+apt-get install wmctrl
+\end{lstlisting}

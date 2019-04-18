@@ -1,0 +1,81 @@
+\chapter{Server Naming Scheme}
+\label{chp:serverNamingScheme}
+
+Servers are usually named haphazardly by picking a name such as Simpsons characters, or Family Guy characters.  However I came across a guide on the web~\footnote{\url{https://www.mnxsolutions.com/devops/a-proper-server-naming-scheme.html}}.
+
+The basic idea is that there are two types of DNS records for each server, an 'A' record, and a 'CNAME' record.
+
+\section{A Records}
+
+The 'A' record is made by choosing a random name from a unique word list, such as the one in appendix~\ref{app:uniquewordlist}, and using that as a subdomain of your purchased domain.  For example the random word is \textit{vampire}, so the A record would be
+
+\begin{verbatim}
+vampire.example.com : 192.168.1.1
+\end{verbatim}
+
+\section{CNAME Records}
+
+Now the CNAME record can be used for server administrators to know what each server does at a glance, following the system below in table~\ref{tab:CNAMEsystem}, an using the abbreviations in tables~\ref{tab:evironmentAbb} \&~\ref{tab:purposeAbb}.
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rowcolor{Gray}
+Purpose & Environment & Location & Domain\\
+\hline
+\end{tabular}
+\caption{CNAME System}
+\label{tab:CNAMEsystem}
+\end{table}
+
+So for example our vampire server from earlier would have a record like:
+
+\begin{verbatim}
+ssh01.prd.cdf.example.com
+\end{verbatim}
+
+So from the beginning, \textit{ssh} states its a SSH server, \textit{prd} states its a production server, and \textit{cdf} states its located in Cardiff, UK.  If you have servers in different countries you can add the two letter country code in front of the three letter location.  I use the UN locode list for location symbols, \href{http://www.unece.org/cefact/locode/service/location.html}{\textbf{UN LOCODE Database}}.
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{Gray}
+Abbreviation & Description\\
+\hline
+dev & Development\\
+tst & Testing\\
+stg & Staging\\
+prd & Production\\
+\hline
+\end{tabular}
+\caption{Environment Abbreviations}
+\label{tab:evironmentAbb}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\rowcolor{Gray}
+Abbreviation & Description\\
+\hline
+app & Application Server\\
+sql & Database Server\\
+ftp & FTP Server\\
+mta & Mail Server\\
+dns & Name Server\\
+cfg & Configuration Management Server\\
+mon & Monitoring Server\\
+prx & Proxy/Load Balancing\\
+ssh & SSH Jump/Bastion\\
+sto & Storage Server\\
+vcs & Version Control Server\\
+vmm & Virtual Machine Manager\\
+web & Web Server\\
+\hline
+\end{tabular}
+\caption{Purpose Abbreviations}
+\label{tab:purposeAbb}
+\end{table}

@@ -1,0 +1,32 @@
+\chapter{phpBB server}
+
+install mysql and apache, sections~\ref{chp:mysql} and~\ref{apache}.
+
+Now do the following;
+\begin{lstlisting}
+sudo apt-get install phpbb3
+\end{lstlisting}
+you'll be prompted for the mysql root password, not the root users password.
+
+\begin{lstlisting}
+sudo ln -s /usr/share/phpbb3/www /var/www/phpbb
+\end{lstlisting}
+
+If you get a message about php environment not having support for a database run this;
+\begin{lstlisting}
+sudo /etc/init.d/apache2 restart
+\end{lstlisting}
+
+Now the server should be running, go to an internet browser and go to the address;
+\begin{lstlisting}
+http://{THE SERVER IP}/phpbb
+\end{lstlisting}
+
+The server now needs configuring from the graphical admin control panel using the default user and password given below;
+
+\begin{verbatim}
+username = admin
+password = admin
+\end{verbatim}
+
+Don't forget to change the password and enable the board! (Both in the admin c.p.)

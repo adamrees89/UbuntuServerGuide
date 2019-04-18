@@ -1,0 +1,40 @@
+\chapter{Fail2Ban jail.local Example}
+\label{app:fail2banLocal}
+
+\begin{lstlisting}
+[ssh]
+enabled = true
+port = 500
+maxretry = 2
+
+[pam-generic]
+enabled = true
+maxretry = 2
+
+[ssh-ddos]
+enabled = true
+port = 500
+
+[apache]
+enabled = true
+logpath = /var/log/apache2/access.log
+
+[apache-noscript]
+enabled = true
+logpath = /var/log/apache2/access.log
+
+[apache-overflows]
+enabled = true
+logpath = /var/log/apache2/access.log
+
+
+[apache-postflood]
+
+enabled = true
+port = http,https
+filter = apache-postflood
+logpath = /var/log/apache2/access.log
+findtime = 10
+maxretry = 1
+
+\end{lstlisting}

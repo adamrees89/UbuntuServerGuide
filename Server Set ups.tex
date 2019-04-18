@@ -1,0 +1,72 @@
+\documentclass[11pt, a4paper, final]{report}
+
+\input{./supportfiles/setup}
+
+\begin{document}
+
+\input{./supportfiles/front_matter}
+%\input{./chapters/feedback.tex}
+%---------------------------------------------------------------------------------
+\part{Starting off}
+\pagenumbering{arabic}
+
+\input{./chapters/basic}
+\input{./chapters/advanced_basics}
+\input{./chapters/messages}
+\input{./chapters/security}
+\input{./chapters/ssh}
+\input{./chapters/vm}
+%----------------------------------------------------------
+\part{Hardware}
+\label{part:hardware}
+%-----------------------------------------------------------
+\input{./chapters/serverNamingScheme}
+\input{./chapters/hardware}
+%---------------------------------------------------------------------------------
+\part{User Management}
+
+\input{./chapters/multi}
+%---------------------------------------------------------------------------------
+\part{Bash Scripting}
+
+\input{./chapters/bashbasics.tex}
+%---------------------------------------------------------------------------------
+\part{Standard Server Applications}
+
+\input{./chapters/ftp}
+%\input{./chapters/subversion} - Removed
+\input{./chapters/apache}
+\input{./chapters/mysql}
+\input{./chapters/phpbb}
+\input{./chapters/samba}
+%\input{./chapters/alfresco}
+\input{./chapters/mailserver}
+\input{./chapters/openproject}
+\input{./chapters/mediagoblin}
+\input{./chapters/zm}
+\input{./chapters/partkeepr}
+%----------------------------------------------------------------------------------
+\part{Game Servers}
+%----------------------------------------------------------------------------------
+\input{./chapters/teamspeak}
+\input{./chapters/minecraft}
+\input{./chapters/simutrans}
+%----------------------------------------------------------
+\part{Uninstallation}
+\label{part:uninstall}
+%-----------------------------------------------------------
+\input{./chapters/uninstallbasics}
+%----------------------------------------------------------
+\part{Additional - Appendices}
+%-----------------------------------------------------------
+\appendix
+%\input{./chapters/subversion_a} - Removed
+\input{./chapters/empire}
+\input{./chapters/bashwmctrl}
+\input{./chapters/mailconfig}
+\input{./chapters/fail2banLocal}
+\input{./chapters/fail2banRule}
+\input{./chapters/uniqueWordList}
+
+%---------------------------------------------------------------------------------
+\end{document}

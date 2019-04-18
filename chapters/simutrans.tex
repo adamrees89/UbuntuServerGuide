@@ -1,0 +1,60 @@
+\chapter{Simutrans Server - \textit{INCOMPLETE}}
+
+\section{Beginning}
+
+So to start we need a subversion client installed, and the build-essential package in order to compile the binaries;
+
+\begin{lstlisting}
+sudo apt-get install subversion
+sudo apt-get install build-essential
+\end{lstlisting}
+
+and we download the latest simutrans version from the server by running;
+
+\begin{lstlisting}
+svn co --username anon -r 4303 svn://tron.homeunix.org/simutrans/simutrans/trunk
+\end{lstlisting}
+
+when prompted for a password just hit \keys{\enter}.
+
+\section{Compiling}
+
+Now go into the trunk directory and copy the config file using the command below;
+
+\begin{lstlisting}
+cp config.template config.default
+\end{lstlisting}
+
+Now open the new file using;
+
+\begin{lstlisting}
+sudo nano config.default
+\end{lstlisting}
+
+and uncomment the following
+
+$$
+BACKEND = posix
+$$$$
+COLOUR\_DEPTH = 0
+$$$$
+OSTYPE = linux
+$$$$
+DEBUG = 3
+$$$$
+OPTIMISE = 1
+$$$$
+WITH\_REVISION = 1
+$$
+
+Then run the;
+
+\begin{lstlisting}
+make
+\end{lstlisting}
+
+command. Followed by the;
+
+\begin{lstlisting}
+strip sim
+\end{lstlisting}

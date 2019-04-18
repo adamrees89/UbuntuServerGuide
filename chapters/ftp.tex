@@ -1,0 +1,93 @@
+\chapter{FTP Server}
+
+This is a good way of getting files to your machine without using Dropbox, which does not work unless you are logged in...
+
+\textbf{vsftpd} is an FTP daemon available in Ubuntu. It is easy to install, set up, and maintain. Run the following command:
+
+\begin{lstlisting}
+sudo apt-get install vsftpd
+\end{lstlisting}
+
+Now there are two ways of configuring the ftp server, Anonymous or User Authenticated.
+
+Anonymous is good when your server is only accessible from within your LAN, this is the default setting when the server is installed.  A FTP user is created and the default upload location is
+$$
+/home/ftp
+$$
+
+However I prefer the User Authenticated version in which the user logs in with their own user name on the server and uploads to their home directory.  Both installation procedures are shown in this section.
+
+\section{User Authenticated}
+
+To enable the server to authenticate the FTP users before allowing access, then open $$/etc/vsftpd.conf$$ using nano.
+
+Change the following;
+
+\begin{lstlisting}
+local_enable=YES
+write_enable=YES
+\end{lstlisting}
+
+Restart the FTP server by running
+
+\begin{lstlisting}
+sudo /etc/init.d/vsftpd restart
+\end{lstlisting}
+
+The configuration to this point will allow users of the server to log in and upload files, however to secure the FTP server further we can restrict users to their home directories by uncommenting the line;
+
+\begin{lstlisting}
+chroot_local_user=YES
+\end{lstlisting}
+
+Or even restrict certain users to their home directory by uncommenting;
+
+\begin{lstlisting}
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd.chroot_list
+\end{lstlisting}
+
+Running the command;
+
+\begin{lstlisting}
+sudo nano /etc/vsftpd.chroot_list
+\end{lstlisting}
+
+Will create the file which restricts users to their home directory, simply add usernames one per line.
+
+Also $$ /etc/ftpusers $$ is a list of users that are disallowed FTP access.
+
+The server can be further secured with a SSL certificate, read this web page; \href{https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}{Certificates}\footnote{For thos who can not click - https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}
+
+To enable secure FTP (FTPS) then add the following line to the bottom of $$/etc/vsftpd.conf$$
+
+\begin{lstlisting}
+ssl_enable=Yes
+\end{lstlisting}
+
+Notice the key and certificate related options;
+
+\begin{lstlisting}
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+\end{lstlisting}
+
+\section{Anonymous}
+
+This is the default configuration, and the uploaded files are available in 
+$$
+/home/ftp
+$$
+
+However to change the default directory to $$/srv/ftp$$ for example then simply change the FTP users home directory;
+
+\begin{lstlisting}
+sudo mkdir /srv/ftp
+sudo usermod -d /srv/ftp ftp 
+\end{lstlisting}
+
+Then restart the FTP service;
+
+\begin{lstlisting}
+sudo /etc/init.d/vsftpd restart
+\end{lstlisting}

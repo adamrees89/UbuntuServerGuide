@@ -1,0 +1,171 @@
+\BOOKMARK [-1][-]{part.1}{I Starting off}{}% 1
+\BOOKMARK [0][-]{chapter.1}{First things first}{part.1}% 2
+\BOOKMARK [1][-]{section.1.1}{Explanation of this Guide}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.2}{Basic Commands}{chapter.1}% 4
+\BOOKMARK [2][-]{subsection.1.2.1}{Sudo}{section.1.2}% 5
+\BOOKMARK [2][-]{subsection.1.2.2}{Apt-get}{section.1.2}% 6
+\BOOKMARK [2][-]{subsection.1.2.3}{Shutting Down and Rebooting}{section.1.2}% 7
+\BOOKMARK [2][-]{subsection.1.2.4}{Other Commands}{section.1.2}% 8
+\BOOKMARK [1][-]{section.1.3}{Useful Software}{chapter.1}% 9
+\BOOKMARK [2][-]{subsection.1.3.1}{Screen}{section.1.3}% 10
+\BOOKMARK [2][-]{subsection.1.3.2}{Beep}{section.1.3}% 11
+\BOOKMARK [2][-]{subsection.1.3.3}{sl}{section.1.3}% 12
+\BOOKMARK [2][-]{subsection.1.3.4}{Festival}{section.1.3}% 13
+\BOOKMARK [2][-]{subsection.1.3.5}{figlet}{section.1.3}% 14
+\BOOKMARK [2][-]{subsection.1.3.6}{cifs-utils}{section.1.3}% 15
+\BOOKMARK [1][-]{section.1.4}{Nano}{chapter.1}% 16
+\BOOKMARK [1][-]{section.1.5}{Less}{chapter.1}% 17
+\BOOKMARK [1][-]{section.1.6}{Tail}{chapter.1}% 18
+\BOOKMARK [1][-]{section.1.7}{Multitail}{chapter.1}% 19
+\BOOKMARK [1][-]{section.1.8}{Grep}{chapter.1}% 20
+\BOOKMARK [2][-]{subsection.1.8.1}{Using the -C option}{section.1.8}% 21
+\BOOKMARK [2][-]{subsection.1.8.2}{Using the -r option}{section.1.8}% 22
+\BOOKMARK [1][-]{section.1.9}{Find}{chapter.1}% 23
+\BOOKMARK [2][-]{subsection.1.9.1}{Find files in current directory with 777 permisions and change to 666}{section.1.9}% 24
+\BOOKMARK [2][-]{subsection.1.9.2}{Find all files modified in the last 30 mins}{section.1.9}% 25
+\BOOKMARK [2][-]{subsection.1.9.3}{Find files that are newer than another file, in the current directory}{section.1.9}% 26
+\BOOKMARK [1][-]{section.1.10}{watch}{chapter.1}% 27
+\BOOKMARK [1][-]{section.1.11}{wget}{chapter.1}% 28
+\BOOKMARK [2][-]{subsection.1.11.1}{Multiple Downloads}{section.1.11}% 29
+\BOOKMARK [1][-]{section.1.12}{Tar}{chapter.1}% 30
+\BOOKMARK [2][-]{subsection.1.12.1}{Multi-Processor Gzip}{section.1.12}% 31
+\BOOKMARK [1][-]{section.1.13}{Stop any process}{chapter.1}% 32
+\BOOKMARK [2][-]{subsection.1.13.1}{htop}{section.1.13}% 33
+\BOOKMARK [1][-]{section.1.14}{Cronjob - Schedule a task}{chapter.1}% 34
+\BOOKMARK [2][-]{subsection.1.14.1}{Suppress Crontab email}{section.1.14}% 35
+\BOOKMARK [1][-]{section.1.15}{Aliases}{chapter.1}% 36
+\BOOKMARK [0][-]{chapter.2}{Advanced}{part.1}% 37
+\BOOKMARK [1][-]{section.2.1}{Mounting Windows/Samba Shares}{chapter.2}% 38
+\BOOKMARK [2][-]{subsection.2.1.1}{Temporary Mounting}{section.2.1}% 39
+\BOOKMARK [2][-]{subsection.2.1.2}{Permanent Mounting}{section.2.1}% 40
+\BOOKMARK [1][-]{section.2.2}{Monitoring Computer Physical Properties}{chapter.2}% 41
+\BOOKMARK [1][-]{section.2.3}{Symbolic Links and bind mounts}{chapter.2}% 42
+\BOOKMARK [2][-]{subsection.2.3.1}{Symbolic Links}{section.2.3}% 43
+\BOOKMARK [2][-]{subsection.2.3.2}{Bind mounts}{section.2.3}% 44
+\BOOKMARK [1][-]{section.2.4}{Software RAID - INCOMPLETE}{chapter.2}% 45
+\BOOKMARK [1][-]{section.2.5}{Unattended Upgrades}{chapter.2}% 46
+\BOOKMARK [2][-]{subsection.2.5.1}{Notifications}{section.2.5}% 47
+\BOOKMARK [1][-]{section.2.6}{SysRq Key}{chapter.2}% 48
+\BOOKMARK [1][-]{section.2.7}{Automatic log on to command line interface}{chapter.2}% 49
+\BOOKMARK [1][-]{section.2.8}{Disabling Graphical Display for Servers}{chapter.2}% 50
+\BOOKMARK [1][-]{section.2.9}{Disable the Case power button}{chapter.2}% 51
+\BOOKMARK [1][-]{section.2.10}{De-fragmentation of Hard Drive}{chapter.2}% 52
+\BOOKMARK [0][-]{chapter.3}{Messages}{part.1}% 53
+\BOOKMARK [1][-]{section.3.1}{System Internal Messages}{chapter.3}% 54
+\BOOKMARK [1][-]{section.3.2}{System Mail}{chapter.3}% 55
+\BOOKMARK [2][-]{subsection.3.2.1}{Stopping Automatic Mail}{section.3.2}% 56
+\BOOKMARK [1][-]{section.3.3}{Sending an internal mail}{chapter.3}% 57
+\BOOKMARK [1][-]{section.3.4}{Email to another computer}{chapter.3}% 58
+\BOOKMARK [0][-]{chapter.4}{Server Security}{part.1}% 59
+\BOOKMARK [1][-]{section.4.1}{Physical Security}{chapter.4}% 60
+\BOOKMARK [2][-]{subsection.4.1.1}{Boot Order}{section.4.1}% 61
+\BOOKMARK [2][-]{subsection.4.1.2}{BIOS password}{section.4.1}% 62
+\BOOKMARK [2][-]{subsection.4.1.3}{Case security}{section.4.1}% 63
+\BOOKMARK [1][-]{section.4.2}{Software Hardening}{chapter.4}% 64
+\BOOKMARK [2][-]{subsection.4.2.1}{Un-necessary software}{section.4.2}% 65
+\BOOKMARK [2][-]{subsection.4.2.2}{root access}{section.4.2}% 66
+\BOOKMARK [2][-]{subsection.4.2.3}{Fail2Ban}{section.4.2}% 67
+\BOOKMARK [1][-]{section.4.3}{Monitoring - INCOMPLETE}{chapter.4}% 68
+\BOOKMARK [2][-]{subsection.4.3.1}{iftop}{section.4.3}% 69
+\BOOKMARK [2][-]{subsection.4.3.2}{nethogs}{section.4.3}% 70
+\BOOKMARK [2][-]{subsection.4.3.3}{bmon}{section.4.3}% 71
+\BOOKMARK [2][-]{subsection.4.3.4}{vnstat}{section.4.3}% 72
+\BOOKMARK [2][-]{subsection.4.3.5}{speedometer}{section.4.3}% 73
+\BOOKMARK [1][-]{section.4.4}{Backup}{chapter.4}% 74
+\BOOKMARK [1][-]{section.4.5}{Monitoring Logs}{chapter.4}% 75
+\BOOKMARK [0][-]{chapter.5}{SSH Server with Public-Private key Authentication}{part.1}% 76
+\BOOKMARK [1][-]{section.5.1}{Installation}{chapter.5}% 77
+\BOOKMARK [1][-]{section.5.2}{Display a banner on login}{chapter.5}% 78
+\BOOKMARK [1][-]{section.5.3}{Accessing the SSH shell remotely}{chapter.5}% 79
+\BOOKMARK [1][-]{section.5.4}{SSH public-private keys}{chapter.5}% 80
+\BOOKMARK [1][-]{section.5.5}{Further Hardening}{chapter.5}% 81
+\BOOKMARK [1][-]{section.5.6}{Running Scripts after Login}{chapter.5}% 82
+\BOOKMARK [1][-]{section.5.7}{Using Putty \(On Windows\)}{chapter.5}% 83
+\BOOKMARK [1][-]{section.5.8}{Forwarding X11 to Windows}{chapter.5}% 84
+\BOOKMARK [0][-]{chapter.6}{Virtual Machines - INCOMPLETE}{part.1}% 85
+\BOOKMARK [1][-]{section.6.1}{Software Virtualisation}{chapter.6}% 86
+\BOOKMARK [-1][-]{part.2}{II Hardware}{}% 87
+\BOOKMARK [0][-]{chapter.7}{Server Naming Scheme}{part.2}% 88
+\BOOKMARK [1][-]{section.7.1}{A Records}{chapter.7}% 89
+\BOOKMARK [1][-]{section.7.2}{CNAME Records}{chapter.7}% 90
+\BOOKMARK [0][-]{chapter.8}{Hard-drives}{part.2}% 91
+\BOOKMARK [1][-]{section.8.1}{Mounting partitions/other hard drives}{chapter.8}% 92
+\BOOKMARK [2][-]{subsection.8.1.1}{Unmounting}{section.8.1}% 93
+\BOOKMARK [2][-]{subsection.8.1.2}{Permanent Mounting}{section.8.1}% 94
+\BOOKMARK [1][-]{section.8.2}{Hard drive settings}{chapter.8}% 95
+\BOOKMARK [1][-]{section.8.3}{\(Re\)Formatting hard drives}{chapter.8}% 96
+\BOOKMARK [1][-]{section.8.4}{Hard Drive Recovery}{chapter.8}% 97
+\BOOKMARK [-1][-]{part.3}{III User Management}{}% 98
+\BOOKMARK [0][-]{chapter.9}{Creating a new user}{part.3}% 99
+\BOOKMARK [1][-]{section.9.1}{Interactive}{chapter.9}% 100
+\BOOKMARK [1][-]{section.9.2}{Non-Interactive}{chapter.9}% 101
+\BOOKMARK [1][-]{section.9.3}{Bulk User Creation}{chapter.9}% 102
+\BOOKMARK [0][-]{chapter.10}{Multiple User Security}{part.3}% 103
+\BOOKMARK [1][-]{section.10.1}{Sudo logging}{chapter.10}% 104
+\BOOKMARK [1][-]{section.10.2}{File Permissions}{chapter.10}% 105
+\BOOKMARK [2][-]{subsection.10.2.1}{Permissionless files}{section.10.2}% 106
+\BOOKMARK [0][-]{chapter.11}{User Management}{part.3}% 107
+\BOOKMARK [1][-]{section.11.1}{Listing all the human users of a linux box}{chapter.11}% 108
+\BOOKMARK [1][-]{section.11.2}{Forcing password policies}{chapter.11}% 109
+\BOOKMARK [2][-]{subsection.11.2.1}{Change password on first/next login}{section.11.2}% 110
+\BOOKMARK [1][-]{section.11.3}{Adding Users to groups}{chapter.11}% 111
+\BOOKMARK [2][-]{subsection.11.3.1}{Difference between Primary and Secondary Groups}{section.11.3}% 112
+\BOOKMARK [1][-]{section.11.4}{Locking/Unlocking Accounts}{chapter.11}% 113
+\BOOKMARK [1][-]{section.11.5}{Changing User Details}{chapter.11}% 114
+\BOOKMARK [1][-]{section.11.6}{Remotely log-off other users}{chapter.11}% 115
+\BOOKMARK [2][-]{subsection.11.6.1}{By User-name}{section.11.6}% 116
+\BOOKMARK [2][-]{subsection.11.6.2}{By controlling terminal}{section.11.6}% 117
+\BOOKMARK [-1][-]{part.4}{IV Bash Scripting}{}% 118
+\BOOKMARK [0][-]{chapter.12}{Basics of Bash}{part.4}% 119
+\BOOKMARK [1][-]{section.12.1}{Bash Scripts}{chapter.12}% 120
+\BOOKMARK [2][-]{subsection.12.1.1}{Output}{section.12.1}% 121
+\BOOKMARK [0][-]{chapter.13}{Window Control with Bash}{part.4}% 122
+\BOOKMARK [-1][-]{part.5}{V Standard Server Applications}{}% 123
+\BOOKMARK [0][-]{chapter.14}{FTP Server}{part.5}% 124
+\BOOKMARK [1][-]{section.14.1}{User Authenticated}{chapter.14}% 125
+\BOOKMARK [1][-]{section.14.2}{Anonymous}{chapter.14}% 126
+\BOOKMARK [0][-]{chapter.15}{Apache}{part.5}% 127
+\BOOKMARK [1][-]{section.15.1}{Installation}{chapter.15}% 128
+\BOOKMARK [1][-]{section.15.2}{Initial Set up}{chapter.15}% 129
+\BOOKMARK [1][-]{section.15.3}{Virtual Hosts}{chapter.15}% 130
+\BOOKMARK [2][-]{subsection.15.3.1}{Setting up multiple hosts}{section.15.3}% 131
+\BOOKMARK [1][-]{section.15.4}{Hardening}{chapter.15}% 132
+\BOOKMARK [2][-]{subsection.15.4.1}{Right Users}{section.15.4}% 133
+\BOOKMARK [2][-]{subsection.15.4.2}{ServerTokens}{section.15.4}% 134
+\BOOKMARK [2][-]{subsection.15.4.3}{SSL}{section.15.4}% 135
+\BOOKMARK [0][-]{chapter.16}{MySql}{part.5}% 136
+\BOOKMARK [1][-]{subsection.16.0.1}{MySQL basic commands}{chapter.16}% 137
+\BOOKMARK [2][-]{subsection.16.0.2}{Reset mysql root password}{subsection.16.0.1}% 138
+\BOOKMARK [2][-]{subsection.16.0.3}{Backup and Restore MySQL databases}{subsection.16.0.1}% 139
+\BOOKMARK [0][-]{chapter.17}{phpBB server}{part.5}% 140
+\BOOKMARK [0][-]{chapter.18}{Samba}{part.5}% 141
+\BOOKMARK [1][-]{section.18.1}{Installation}{chapter.18}% 142
+\BOOKMARK [0][-]{chapter.19}{Mail Server}{part.5}% 143
+\BOOKMARK [0][-]{chapter.20}{Open Project}{part.5}% 144
+\BOOKMARK [0][-]{chapter.21}{Media Goblin}{part.5}% 145
+\BOOKMARK [0][-]{chapter.22}{Zone Minder}{part.5}% 146
+\BOOKMARK [0][-]{chapter.23}{Partkeepr}{part.5}% 147
+\BOOKMARK [-1][-]{part.6}{VI Game Servers}{}% 148
+\BOOKMARK [0][-]{chapter.24}{Teamspeak Server}{part.6}% 149
+\BOOKMARK [1][-]{section.24.1}{Set-up}{chapter.24}% 150
+\BOOKMARK [0][-]{chapter.25}{Minecraft Server}{part.6}% 151
+\BOOKMARK [1][-]{section.25.1}{Updating Java}{chapter.25}% 152
+\BOOKMARK [1][-]{section.25.2}{Installing Minecraft Server}{chapter.25}% 153
+\BOOKMARK [1][-]{section.25.3}{Stopping and Starting the server}{chapter.25}% 154
+\BOOKMARK [1][-]{section.25.4}{Useful commands in MC Server}{chapter.25}% 155
+\BOOKMARK [0][-]{chapter.26}{Simutrans Server - INCOMPLETE}{part.6}% 156
+\BOOKMARK [1][-]{section.26.1}{Beginning}{chapter.26}% 157
+\BOOKMARK [1][-]{section.26.2}{Compiling}{chapter.26}% 158
+\BOOKMARK [-1][-]{part.7}{VII Uninstallation}{}% 159
+\BOOKMARK [0][-]{chapter.27}{Basics}{part.7}% 160
+\BOOKMARK [1][-]{section.27.1}{Program Uninstallation}{chapter.27}% 161
+\BOOKMARK [1][-]{section.27.2}{Startup Removal}{chapter.27}% 162
+\BOOKMARK [1][-]{section.27.3}{Group/User Removal}{chapter.27}% 163
+\BOOKMARK [1][-]{section.27.4}{Nuclear Option}{chapter.27}% 164
+\BOOKMARK [-1][-]{part.8}{VIII Additional - Appendices}{}% 165
+\BOOKMARK [0][-]{appendix.A}{Empire Strikes Back - Beep Tune}{part.8}% 166
+\BOOKMARK [0][-]{appendix.B}{Bash Window Control}{part.8}% 167
+\BOOKMARK [0][-]{appendix.C}{SSMPT configuration File}{part.8}% 168
+\BOOKMARK [0][-]{appendix.D}{Fail2Ban jail.local Example}{part.8}% 169
+\BOOKMARK [0][-]{appendix.E}{Fail2Ban Apache Rule}{part.8}% 170
+\BOOKMARK [0][-]{appendix.F}{Unique Word List}{part.8}% 171

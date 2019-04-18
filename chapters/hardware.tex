@@ -1,0 +1,192 @@
+\chapter{Hard-drives}
+\label{chp:hardware}
+
+\section{Mounting partitions/other hard drives}
+\label{sec:mount_hd}
+
+First list all the drives on the computer;
+
+\begin{lstlisting}
+sudo fdisk -l
+\end{lstlisting}
+
+create a directory somewhere easy, and then mount the partition.
+
+We do this by simply typing;
+
+\begin{lstlisting}
+sudo mkdir /media/newhd
+sudo mount /dev/[HDD Name] [SOME PLACE (~/newhd)]
+\end{lstlisting}
+
+where [HDD Name] is the name of the hard drive shown in fdisk, and newhd is the name you want to give it in your Ubuntu file system.
+
+You can now view the files by navigating to the mounted disk, this is found in;
+
+$$~/newhd$$
+
+\subsection{Unmounting}
+
+Unmounting is quite easy, to unmount the hard drive mounted previously we type;
+
+\begin{lstlisting}
+sudo umount /dev/[HDD Name]
+\end{lstlisting}
+
+\subsection{Permanent Mounting}
+\label{ssec:permanentHDMount}
+
+To automatically mount the drive on start-up (Or 'permanent' mounting) we put an entry into the fstab file.
+
+\begin{lstlisting}
+sudo nano /etc/fstab
+\end{lstlisting}
+
+Now we input an entry into the file using the following protocol;
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\rowcolor{Gray}
+File System & Mount Point & Type & Options & Dump & Pass\\
+\hline
+\end{tabular}
+\caption{Fstab protocol}
+\label{tab:fstab}
+\end{table}
+
+Comments are put in using a '$\#$' key, and it is a good idea to enter a comment saying which drive you are adding.
+
+\subsubsection{File System}
+
+In this bit you add the drive that you want to mount. For example:
+
+\begin{verbatim}
+/dev/sdb1
+\end{verbatim}
+
+Or even:
+
+\begin{verbatim}
+UUID:e20c237f-c9cd-4b6e-8c73-5eb8c2f3e85a
+\end{verbatim}
+
+to find the UUID of a drive, we simply type:
+
+\begin{lstlisting}
+sudo blkid
+\end{lstlisting}
+
+\subsubsection{Mount Point}
+
+Now we specify where to mount to drive, for example:
+
+\begin{verbatim}
+/media/hd1
+\end{verbatim}
+
+Make sure the folder exists first!
+
+\subsubsection{Type}
+
+This is simply the filesystem type, for example ext3
+
+\subsubsection{Options}
+
+You can safely leave this as defaults, or google for other options.
+
+\subsubsection{Dump $\&$ Pass}
+
+If you are adding a second drive which will be used for storage, the you can safely just put:
+
+\begin{verbatim}
+0 0
+\end{verbatim}
+
+\section{Hard drive settings}
+
+Ok, so we've installed the hard drive, and mounted it, we've even made a bash script (see section~\ref{ssec:bash}) to automatically mount the drives.  But now we don't want the hard drives constantly spinning away, wasting power or their precious life time.  That's where we need $hpdarm$ lets look at what it does;
+
+\begin{lstlisting}
+sudo hdparm -S 120 /dev/sdb
+\end{lstlisting}
+
+This command will set the spin down time of the 'sdb' hard disk to 10 mins.
+
+\begin{lstlisting}
+sudo hdparm -C /dev/sdb
+\end{lstlisting}
+
+This command will output the state of the drive, i.e. active/idle, or standby
+
+\begin{lstlisting}
+sudo hdparm -M 254 /dev/sdb
+\end{lstlisting}
+
+This command sets the AAM (Automatic Acoustic Management) value to 254 (Nosiest/Fastest).  The possible values are;
+\begin{itemize}
+\item 0 - AAM off
+\item 128 - Normal (Manufacturers Recommended)
+\item 254 - Fastest
+\end{itemize}
+
+\begin{lstlisting}
+sudo hdparm -y /dev/sdb
+\end{lstlisting}
+
+This command suspends the current drive putting it into standby mode. \textbf{IMPORTANT:} Don't use -Y as this will put the hard drive into off mode which require a restart of the computer.
+
+
+\section{(Re)Formatting hard drives}
+\label{sec:format_hdd}
+
+So we have a new hard drive or found an old one and want to reformat it for linux.  We are going to use two tools \textbf{fdisk} and \textbf{mkfs}.  First things first we need to check the hard drive is not mounted. (See Section~\ref{sec:mount_hd} for help).
+
+Now lets list the hard drives on our computer, using;
+
+\begin{lstlisting}
+sudo fdisk -l
+\end{lstlisting}
+
+So lets say the hard drive we want to format is listed as \textit{sdb}, we now need to start fdisk and point it at the right drive;
+
+\begin{lstlisting}
+sudo fdisk /dev/sdb
+\end{lstlisting}
+
+You will now be put into an environment where we can do a lot of damage to the hard drive, but don't let that put you off, its all reversible! (Except recovery of files/folders)  Lets delete all the partitions on the drive, lets say there is only one on this example drive, but just repeat the process for all the partitions, type;
+
+\begin{lstlisting}
+d 1
+\end{lstlisting}
+
+and then type \keys{\enter} to delete that partition.
+
+After deleting the partitions, we need to create a new one, simply type;
+
+\begin{lstlisting}
+n
+\end{lstlisting}
+
+At the prompt, you need to type \keys{p} for primary, and then \keys{\enter}, pressing \keys{\enter} for the next two questions, letting it get on with its thing.
+
+Now we have a blank drive with one partition, so we need to type \keys{w} and then \keys{\enter} to exit fdisk and save the changes.
+
+With all this done we can create the file system that we are going to use.  Do some research and find the best for you, but in this example we are going to use ext3;
+
+\begin{lstlisting}
+sudo mkfs.ext3 /dev/sdb1
+\end{lstlisting}
+
+Where \textbf{sdb1} is the new partition that we created.  Now wait for it to finish and then you can use the hard drive as normal.  (See Section~\ref{sec:mount_hd} for advice on how to mount and use your hard drive)
+
+\section{Hard Drive Recovery}
+\label{sec:HDRecovery}
+
+If you have a corrupt hard drive, we may be able to recover the data from within Linux.  This works with a hard drive from multiple operating systems including Windows, Mac, and Linux itself.  We need to install some software to help us, run the following command as sudo:
+
+\begin{lstlisting}
+apt-get install --no-install-recommends smartmontools
+apt-get install testdisk
+\end{lstlisting}

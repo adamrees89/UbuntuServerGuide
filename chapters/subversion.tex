@@ -1,0 +1,104 @@
+\chapter{Subversion Server}
+\label{chp:subversion}
+\section{Installation}
+
+So to start lets install the required packages;
+
+\begin{lstlisting}
+sudo apt-get install subversion
+sudo apt-get install subversion-tools
+\end{lstlisting}
+
+With these installed, lets create a new directory for all your repository’s in the $home$ folder;
+
+\begin{lstlisting}
+sudo mkdir /home/svn
+\end{lstlisting}
+
+Now with this done we need to configure the groups to administer the subversion access control;
+
+\begin{lstlisting}
+sudo groupadd svn
+sudo chgrp svn /home/svn
+sudo chmod g+w /home/svn
+sudo chmod g+s /home/svn
+sudo usermod -a -G svn [YOU]
+\end{lstlisting}
+
+Ok so we've created a new group called $svn$ given it ownership of the svn home directory $/home/svn$ changed the permissions so the group can read and write in the directory, and all new files will have the same permissions. Finally we have added the user to the group.  You can add other people to the group using the same command.
+
+\section{Creating a Repository}
+
+Ok creating a repository is simple, run the following in the correct location;
+
+\begin{lstlisting}
+umask 002
+svnadmin create /home/svn/test
+umask 022
+\end{lstlisting}
+
+\section{Access}
+\label{sec:subaccess}
+Now accessing the repository is going to be done through the svn:// protocol.  There are others but I'm not going to show you how to do it.
+
+Now once the repository is set up we can edit the config file in said repository.  Going by the set up our config file is here $$/home/svn/test/conf/svnserve.conf$$
+
+Run the following;
+
+\begin{lstlisting}
+sudo nano /home/svn/test/conf/svnserve.conf
+\end{lstlisting}
+
+Now you can uncomment the following line in this file;
+
+$$
+password-db = passwd
+$$
+
+And uncomment and change the following line to;
+
+$$
+anon-access = none
+$$
+
+Now we can maintain a list of passwords in the same as directory the add new user file.  Which is located here
+$Location of Files$
+
+The syntax of this file is as follows;
+
+\begin{lstlisting}
+username = password
+\end{lstlisting}
+
+Now we can run svnserve to enable access from another machine.  This is simply a case of running the following;
+
+\begin{lstlisting}
+svnserve -d --foreground -r /home/svn
+\end{lstlisting}
+
+Where;
+\begin{itemize}
+\item $-d$ is daemon mode
+\item $--foreground$ run in the foreground (good for debugging)
+\item $-r$ root directory ($/home/svn$)
+\end{itemize}
+
+
+Now you can checkout files, edit them and check them back in!  We just need to now run the subversion server at startup to finish the process;
+
+We simply add a script to $init.d$ called $svnserve$
+
+See appendix~\ref{app:subversion}
+
+After adding this file change the permissions to executable and then update init.d by running the following;
+
+\begin{lstlisting}
+sudo chmod +x /etc/init.d/svnserve
+sudo update-rc.d svnserve defaults
+\end{lstlisting}
+
+Now it will start automatically everytime the server is rebooted, or if you type this;
+
+\begin{lstlisting}
+sudo /etc/init.d/svnserve start
+\end{lstlisting}

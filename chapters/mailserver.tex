@@ -1,0 +1,36 @@
+\chapter{Mail Server}
+
+Figure~\ref{fig:mail} shows the process by which mail is sent and received, and all the different parts involved.  This is just a basic schematic and doesn't show the web interface for collecting mails, which is simply an apache server.  Not shown in the picture is a wrapper software that interfaces between clamAV/Spam Assassin and Postfix
+
+The red line indicates an outgoing message from the client, and the black line indicates an incoming message.  As can be seen all interactions between the mail server and the outside world are handled by postfix, and interactions between the server and client are handled by dovecot.  ClamAV and Spamassassin are simply screening tools used by the server to keep the client safe.  There are other tools available also these are listed in table~\ref{tab:mail_serv}
+
+\vspace{1.5cm}
+\begin{figure}[h!]
+\centering
+\input{./supportfiles/mail_diag}
+\caption{Schematic showing mail server interactions}
+\label{fig:mail}
+\end{figure}
+
+%------------------
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{cc}
+\hline
+Service & Description\\
+\hline
+Mailman & Mailing list management program\\
+Scrollout & Anti Spam Software\\
+\hline
+\end{tabular}
+\caption{Table of other services available to run with a mail server}
+\label{tab:mail_serv}
+\end{table}
+
+\subsubsection*{Resources}
+
+\href{http://www.serverubuntu.it/postfix-dovecot-guide}{Postfix Installation}\\
+\href{http://www.serverubuntu.it/postfix-management-tools-commands}{Postfix tools/commands}\\
+\href{https://help.ubuntu.com/community/PostfixAmavisNew}{Postfix filtering software wrapper}
+\href{www.scrolloutf1.com}{Scrollout Anti Spam}\\

@@ -1,0 +1,771 @@
+\chapter{First things first}
+\label{chp:first}
+
+\section{Explanation of this Guide}
+
+This entire guide assumes that you have a fresh install of Ubuntu. This chapter (Chapter~\ref{chp:first}) contains a few packages and commands that will be useful for maintaining a server.~\todo[inline,color=blue!40]{Rewrite this}
+
+\section{Basic Commands}
+
+\subsection{Sudo}
+\label{ssec:sudo}
+
+\todo[inline,color=blue!40]{Write about sudo + apt-get}
+
+\subsection{Apt-get} 
+
+
+
+\subsection{Shutting Down and Rebooting}
+
+
+
+\subsection{Other Commands}
+
+Below in table~\ref{tab:useful_commands} are a list of commands and their uses, these are ones that have been useful when dealing with ubuntu's command line.
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+mtr [IP Address] & Pings the target and shows a tracepath\\
+firefox \& & Runs a process in the terminals background\\
+ & (So you can work with the terminal whilst keeping the process alive)\\
+jobs & Shows all the background processes\\
+fg 1 & brings the task (Number 1) to the terminal\\
+\keys{\ctrl + z} & Key combination detaches from a foreground task, makes it a background task\\
+\keys{\ctrl + d} & Key combination performs logoff command in a terminal\\
+\keys{\ctrl + c} & Key combination for closing programs forcefully\\
+\hline
+\end{tabular}
+\caption{Table of useful commands}
+\label{tab:useful_commands}
+\end{table}
+
+\section{Useful Software}
+
+In this section the installation of some useful programs will be covered;
+
+The command below updates the system then installs \textbf{Screen, beep, sl, festival, figlet, and cifs-utils}.  To save time, the entire batch of software can be written onto one line, installed in one go, and the prompt making sure that we want to install them suppressed by using the following:
+
+\begin{lstlisting}
+apt-get install screen beep sl festival figlet cifs-utils -y
+\end{lstlisting}
+
+\subsection{Screen}
+
+\textbf{Screen} allows the processes to be run in a virtual terminal allowing us to close the 'real' terminal without losing the running process.
+
+There are a few useful commands to know when using screen;
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+screen -S [Screen Name] & New screen with the name [Screen Name]\\
+screen -d -R [Screen Name] & reattaches to a previous screen called [Screen Name]\\
+screen -d -m & creates a new screen but does not attach to it\\
+screen -t [Screen Name] & sets the title for the screen\\
+\hline
+\end{tabular}
+\caption{Table of screen specific commands}
+\label{tab:screen_commands2}
+\end{table}
+
+All the commands can be stacked, and running 
+\begin{lstlisting}
+screen -s test beep
+\end{lstlisting}
+
+will open a screen called test and run the command 'beep'.
+
+There are also key shortcuts that are active in screen, there are in the table below (Table~\ref{tab:screen_commands})-
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+\keys{\ctrl + a + c} & Starts a new screen (within screen)\\
+\keys{\ctrl + a + "} & Lists all the active screens (within screen)\\
+\keys{\ctrl + d} & Terminates a screen\\
+\keys{\ctrl + a + d} & Detaches a screen\\
+\hline
+\end{tabular}
+\caption{Table of screen specific keyboard shortcuts}
+\label{tab:screen_commands}
+\end{table}
+
+\subsection{Beep}
+
+\textbf{Beep} is a bit of software that gives control of the internal motherboard beep with great precision (frequency, duration repetitions etc...)
+
+To get beep to work you'll have to run the following command;
+
+
+\begin{lstlisting}
+sudo nano /etc/modprobe.d/blacklist.conf
+\end{lstlisting}
+
+uncomment the line about the pcspkr, and restart.
+
+In table~\ref{tab:beep} a list of the options and descriptions can be found.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Commands\\
+\hline
+-n & starts a new beep in the same command\\
+\hline
+\end{tabular}
+\caption{Table of commands for beep program}
+\label{tab:beep}
+\end{table}
+
+\todo[inline,color=blue!40]{More options needed here}
+
+\subsection{sl}
+
+\textbf{sl} is a bit of fun that shows a 'steam locomotive' every time you accidentally type $sl$ instead of $ls$.  Try out the following;
+
+\begin{lstlisting}
+sl -alFe
+\end{lstlisting}
+
+\subsection{Festival}
+\textbf{Festival} is a program that will turn text into speech.  Quite useful if your ubuntu installation will have external speakers and you would like some messages to be spoken.
+
+For the brits a nice speech pack is the British 16 bit voice, you can install using;
+
+\begin{lstlisting}
+sudo apt-get install festvox-rablpc16k --yes
+\end{lstlisting}
+
+and to configure festival to work then simply open the config file using nano;
+
+\begin{lstlisting}
+sudo nano /etc/festival.scm
+\end{lstlisting}
+
+and append the following line;
+
+\begin{verbatim}
+(set! voice_default 'voice_rab_diphone)
+\end{verbatim}
+
+This line tells festival to use our new voice pack.
+
+To slow down the speech so it sounds more natural we edit the line;
+
+\begin{verbatim}
+(Parameter.set 'Audio_Command "aplay -q -c 1 -t raw -f s16 -r $SR $FILE")
+\end{verbatim}
+
+to read;
+
+\begin{verbatim}
+(Parameter.set 'Audio_Command "aplay -q -c 1 -t raw -f s16 -r $(($SR*100/100)) $FILE")
+\end{verbatim}
+
+where 100/100 is the speed expressed as an improper fraction, changing the fraction will change the voice speed.
+
+Running the command is simple the following will work;
+
+\begin{lstlisting}
+echo "Your Text to be spoken" | festival --tts
+\end{lstlisting}
+
+Where the $|$ character is the pipe command.
+
+\subsection{figlet}
+
+\textbf{figlet} is a program that will take an input and change it into a nice ASCII art image of the word.
+
+The usage is simple, type;
+
+\begin{lstlisting}
+figlet WORD
+\end{lstlisting}
+
+\subsection{cifs-utils}
+
+cifs-utils is short for \textit{Common Internet File System utilities}.  In this guide it will be used to connect to Windows or Samba shares. See section~\ref{sec:mount_samba} for more information.
+
+\section{Nano}
+\label{sec:nano}
+
+Nano is a built in text editor that will be used throughout this guide, its usage is simple, see below;
+
+\begin{lstlisting}
+nano FILE
+\end{lstlisting}
+
+Depending on who owns the file you may need root privileges to open it.
+
+There are several options when using nano, hit \keys{\ctrl + g} for the help menu within nano.  Remember although linux is case sensitive, the short-cuts shown in the help page are all lower-case.  In table~\ref{tab:nano_com} we can see some of the more useful short-cuts to remember.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Shortcut & Description\\
+\hline
+\keys{\ctrl + x} & Save and Exit\\
+\keys{\ctrl + o} & Save Only\\
+\keys{\ctrl + w} & Find a Word\\
+\keys{Super + x} & Hide the help bar\\
+\hline
+\end{tabular}
+\caption{Table of useful nano shortcuts}
+\label{tab:nano_com}
+\end{table}
+
+\vspace*{0.5cm}
+\begin{minipage}{0.3\textwidth}
+\begin{flushleft} 
+\includegraphics[width=0.9\textwidth]{./supportfiles/point.jpg}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\begin{flushright}
+\hrule
+\vspace*{0.25cm}
+\textit{Root privileges can be obtained by using sudo, see subsection~\ref{ssec:sudo}}
+\vspace{0.25cm}
+\hrule
+\vspace*{0.25cm}
+\textit{The 'Super' key is the windows key on windows keyboards}
+\vspace{0.25cm}
+\hrule
+\end{flushright}
+\end{minipage}
+\vspace*{0.5cm}
+
+\section{Less}
+\label{sec:less}
+
+Less is a useful program for viewing large files.  The syntax is simple;
+
+\begin{lstlisting}
+less FILENAME
+\end{lstlisting}
+
+Once inside the less environment there are a few commands that can be used, these are shown in table~\ref{tab:less};
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+\keys{v} & Edit the current file\\
+\keys{UP} & moves up a line\\
+\keys{DOWN} & moves down a line\\
+\keys{: + e} FILENAME & Examine another file\\
+\keys{: + n} & Examine the next file\\
+\keys{: + p} & Examine the previous file\\
+\keys{?} & Display help\\
+\hline
+\end{tabular}
+\caption{Table of key-commands for LESS command}
+\label{tab:less}
+\end{table}
+
+\section{Tail}
+\label{sec:tail}
+
+A useful command is \textbf{tail} which will output the last 10 (by default) lines of a file.  Using the following command the last 10 lines of the file called FILENAME can be seen
+
+\begin{lstlisting}
+tail FILENAME
+\end{lstlisting}
+
+However if the last 25 lines of this file needs to be seen we can simply use:
+
+\begin{lstlisting}
+tail -n 25 FILENAME
+\end{lstlisting}
+
+This is a useful tool for looking at files that are constantly being written to, for example custom log files that monitor a hard drive state.  When combined with the watch function, see section~\ref{sec:watch} we can constantly monitor the file without running the command repeatedly.  In table~\ref{tab:tail} we can see some of the available commands for tail.  In order to look at multiple log files simultaneously another command can be used called multitail, see section~\ref{sec:multitail}.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-n & Number of lines to print\\
+-f & Follow the file as more is printed\\
+\hline
+\end{tabular}
+\caption{Options available for the tail function}
+\label{tab:tail}
+\end{table}
+
+\section{Multitail}
+\label{sec:multitail}
+
+Multitail is a command that allows watching of multiple log files simultaneously.
+
+
+\section{Grep}
+\label{sec:grep}
+
+Grep \textit{(Global Regular Expression Print)} is a useful program for finding lines in a text file that contain a certain phrase or characters.  The syntax is quite simple;
+
+\begin{lstlisting}
+COMMAND | grep STRING
+
+OR
+
+grep STRING FILENAME
+\end{lstlisting}
+
+where as mentioned previously $|$ is the pipe character.
+
+There are several options defined for grep, these are as follows in table~\ref{tab:grep}
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-i & case insensitive search\\
+-w & search for words not part-strings\\
+-A n & display n number of lines after string\\
+-B n & display n number of lines before string\\
+-C n & display n/2 number of lines before and after string\\
+-r & recursive search through all files and subdirectories of the current directory\\
+-v & show lines with do NOT contain the string\\
+-c & count the number of matches\\
+\hline
+\end{tabular}
+\caption{Options for grep command}
+\label{tab:grep}
+\end{table}
+
+\subsection{Using the -C option}
+
+Lets say we want to show the line before and after our matched expression, we would type;
+
+\begin{lstlisting}
+grep -C 2 STRING FILENAME
+\end{lstlisting}
+
+\subsection{Using the -r option}
+
+This is used for scanning all the files in a directory for the string.  First navigate to the directory and then type;
+
+\begin{lstlisting}
+grep -r STRING *
+\end{lstlisting}
+
+\section{Find}
+
+The find command is self explanitory, it finds files...
+
+However its use is a little more complicated, below is the basic syntax for finding a file called \textit{FILE.EXT}.
+
+\begin{lstlisting}
+find / -name 'FILE.EXT'
+\end{lstlisting}
+
+Where the command will attempt to find the file anywhere on the computer (starting at the root directory '/').  In table~\ref{tab:find} some of the options can be found.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-name & Performs a case sensitive search for the filename\\
+-iname & Performs a case insensitive search\\
+-size & Only lists files of a certain size\\
+ & (e.g. +100M files larger than 100 Mb)\\
+-atime & Only shows files found with a specified access time in days\\
+-perm & Shows files with certain permissions\\
+-exec & Execute the following command on the files found\\
+-type & Find files of type (Either f for file or d for directory)\\
+-user & Find files owned by a user\\
+\hline
+\end{tabular}
+\caption{Table showing find command options}
+\label{tab:find}
+\end{table}
+
+Find is a powerful function, below are some of the more advanced examples
+
+\subsection{Find files in current directory with 777 permisions and change to 666}
+\begin{lstlisting}
+find . -type f -perm 777 -print -exec chmod 666 {} \ ;
+\end{lstlisting}
+
+\subsection{Find all files modified in the last 30 mins}
+\begin{lstlisting}
+find / -cmin -30
+\end{lstlisting}
+
+\subsection{Find files that are newer than another file, in the current directory}
+\begin{lstlisting}
+find . -newer 'FILENAME.EXT'
+\end{lstlisting}
+
+\section{watch}
+\label{sec:watch}
+
+Watch is a function that will run a command repeatedly until stopped by the user.  It defaults to running the command every two seconds, and displaying the output from that command. The syntax is simple and can be seen below:
+
+\begin{lstlisting}
+watch COMMAND TO BE RUN
+\end{lstlisting}
+
+In table~\ref{tab:watch} we can see the options associated with the watch command.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-n & Interval in seconds to run command\\
+-d & Highlight the differences\\
+\hline
+\end{tabular}
+\caption{Table showing options for the watch command}
+\label{tab:watch}
+\end{table}
+
+\todo[inline,color=blue!40]{More options}
+
+
+for example to run the tail command ever 5 minutes we would type:
+
+\begin{lstlisting}
+watch -n 300 tail FILENAME
+\end{lstlisting}
+
+\section{wget}
+
+'wget' is a command line program for downloading files from the internet.  It is simple to use, and to download a single file to the current working directory we simply type;
+
+\begin{lstlisting}
+wget www.fileaddress/file
+\end{lstlisting}
+
+Using this a progress bar will show up, telling you the percentage completed, download speed and time remaining.
+
+We can send the file to a specific output using the flag \textbf{-O}, an example is shown below;
+
+\begin{lstlisting}
+wget -O myfile www.fileaddress/file
+\end{lstlisting}
+
+There are some other options to be used with wget and these are shown in table~\ref{tab:wget}.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-O & Set Output file\\
+--limit-rate & Limit download speed\\
+-c & Resume an incomplete download\\
+-b & Download in background\\
+--spider & Test a download link\\
+-i & Download multiple links (See Subsection~\ref{ssec:multidown})\\
+\hline
+\end{tabular}
+\caption{Table of wget options}
+\label{tab:wget}
+\end{table}
+
+\subsection{Multiple Downloads}
+\label{ssec:multidown}
+
+Lets say we have a file that contains the following;
+
+\begin{verbatim}
+www.mysite1.com/file
+www.mysite1.com/file2
+www.mysite2.com/file
+www.mysite2.com/file2
+\end{verbatim}
+
+We can pass this file to wget, and tell it to download the four files using the following syntax;
+
+\begin{lstlisting}
+wget -i FILENAME
+\end{lstlisting}
+
+Where FILENAME is the name of the file shown above.
+
+
+\section{Tar}
+
+Tar is a program that is used for archiving and compressing folder/files. There are two components an archive and a compression.  Just to clarify, tar does the archiving, and gzip does the compression but tar is the command does both.
+
+First we create a tar archive of our directory $big\_folder$.  the v flag gives a verbose output, and the f gives the filename.
+
+\begin{lstlisting}
+tar cvf little_folder.tar big_folder
+\end{lstlisting}
+
+Now this wont really save on space so we can compress it using;
+
+\begin{lstlisting}
+gzip little_folder.tar
+\end{lstlisting}
+
+This can be done in one step using the \textbf{z} flag;
+
+\begin{lstlisting}
+tar cvfz little_folder.tar.gz big_folder
+\end{lstlisting}
+
+This will archive and compress $big\_folder$ into $little\_folder.tar.gz$ the options are listed and described in table~\ref{tab:tar};
+
+The archive can be extracted by using:
+
+\begin{lstlisting}
+tar xvfz little_folder.tar.gz
+\end{lstlisting}
+
+We can even view to files in the archive without extracting them using;
+
+\begin{lstlisting}
+tar tvfz little_folder.tar.gz
+\end{lstlisting}
+
+If needed you can extract a single file or directory from the archive by using;
+
+\begin{lstlisting}
+tar xvfz little_folder.tar /path/to/dir/
+\end{lstlisting}
+
+for a directory, and
+
+\begin{lstlisting}
+tar xvfz little_folder.tar.gz /path/to/file
+\end{lstlisting}
+
+for a single file.
+
+If you want to add another file to the archive then we can use the following provided that the archive is not compressed (i.e. only a .tar NOT .tar.gz)
+
+\begin{lstlisting}
+tar rvf little_folder.tar added_file/directory
+\end{lstlisting}
+
+If you have compressed the archive then run the following command first before adding a file to the archive;
+
+\begin{lstlisting}
+gzip -d little_folder.tar.gz
+\end{lstlisting}
+
+Finally before creating the archive you may wish to know what size it will be after compressing/creating, linux can estimate this for you and print the result in kb using the command below;
+
+\begin{lstlisting}
+tar -cf - /directory/to/archive/ | wc -c
+\end{lstlisting}
+
+the pipe wc -c will print the size in kb using any of the options discussed in table~\ref{tab:tar}
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+c & Create a tar archive\\
+x & Extract a tar archive\\
+t & View the contents of a tar archive\\
+r & Add a file to a tar archive (Only uncompressed)\\
+\hline
+v & Verbose (Outputs all the files archived)\\
+f & Filename to follow (After options are passed)\\
+z & Compress the archive through gzip\\
+\hline
+\end{tabular}
+\caption{Tar command table}
+\label{tab:tar}
+\end{table}
+
+
+\subsection{Multi-Processor Gzip}
+
+The Gzip command that comes natively bundled with linux, is single threaded.  This means that compression is slower than it could be.  
+
+
+\section{Stop any process}
+
+Using the command line we can very easily kill a process that is maybe taking up too much room, first run;
+
+\begin{lstlisting}
+ps aux | grep PROCESS
+\end{lstlisting}
+
+Now this will return a list of all the running processes that have PROCESS in the name along with the PID of that process. Using that PID we can either end the process with;
+
+\begin{lstlisting}
+kill -s 15 PID
+\end{lstlisting}
+
+or we can send a SIGKILL to force it to end using;
+
+\begin{lstlisting}
+kill -s 9 PID
+\end{lstlisting}
+
+Alternatively 'htop' is a good alternative giving a gui within the command line.  See subsection~\ref{ssec:htop}
+
+\subsection{htop}
+\label{ssec:htop}
+
+\todo[inline,color=blue!40]{Expand this section}
+
+
+\section{Cronjob - Schedule a task}
+
+Crontab allows scheduling of tasks, be it a scheduled restart, an automatic update, or a custom script.
+
+To open crontab, the cronjob editor simply type the following;
+
+\begin{lstlisting}
+crontab -e
+\end{lstlisting}
+
+If it is the first time you have run this command then it will ask you which editor to use, the best one for new users is $nano$ which is explained in section~\ref{sec:nano}.  Simply type the corresponding number of the editor and press \keys{\enter}.
+
+You can specify what to run and when, looking at the blurb at the top of the file explains how to set a job to run at a specified time, for example to get the \textbf{beep} command to run at 12:45 on the 20 August type;
+
+\begin{lstlisting}
+45 12 20 8 * beep
+\end{lstlisting}
+
+From left to right, \directory{Minutes / Hours / Day of Month / Month / Day of week / Command}
+
+If you want it to run every day then type;
+
+\begin{lstlisting}
+45 12 * * * beep
+\end{lstlisting}
+
+Or every Monday (Days of the week are 0-6, as computers start counting at 0)
+
+\begin{lstlisting}
+45 12 * * 0 beep
+\end{lstlisting}
+
+There are a few special commands that let you specify certain times like after a reboot or hourly, these are;
+
+\begin{lstlisting}
+@reboot - Run once at startup
+@yearly - Run once a year at midnight of Jan 1 (@annually)
+@weekly - Run once a week
+@daily - Run once a day
+@midnight - Same as daily
+@hourly - Run once an hour
+\end{lstlisting}
+
+\subsection{Suppress Crontab email}
+
+Sometimes certain crontab jobs will email you if something goes wrong, or just every time something is executed... This can quickly fill your inbox, see the messages chapter (Chapter~\ref{chp:messages}) for more.  To suppress this simply append the following to the end of the conjob:
+
+\begin{lstlisting}
+2>&1 > /dev/null
+\end{lstlisting}
+
+For example, the beep job from earlier would become,
+
+\begin{lstlisting}
+45 12 * * 0 beep 2>&1 > /dev/null
+\end{lstlisting}
+
+Although this particular job doesn't output any mail so doesn't need suppressing.
+
+\section{Aliases}
+\label{sec:alias}
+
+These are really useful little time savers;
+
+simply take the massively long command that you regularly run i.e. starting the minecraft server, as in section~\ref{chp:minecraft};
+
+\begin{lstlisting}
+java -Xmx1024m -Xms1024m -jar minecraft_server.jar nogui
+\end{lstlisting}
+
+and replace with an easy to remember short command i.e.
+
+\begin{lstlisting}
+mine_start
+\end{lstlisting}
+
+to do this the alias command is used.
+
+To start lets list all the aliases known to the system by typing;
+
+\begin{lstlisting}
+alias
+\end{lstlisting}
+
+Now lets create a new alias, type the following;
+
+\begin{lstlisting}
+alias mine_start='java -Xmx1024m -Xms1024m -jar minecraft_server.jar nogui'
+\end{lstlisting}
+
+Now by running $mine\_start$ we can start the minecraft server.
+
+One word of warning, alias' are only valid for the session, so next time you reboot your server you'll lose them, \textbf{unless} you add it to your .bashrc file.  Do this by running the following;
+
+\begin{lstlisting}
+sudo nano ~/.bashrc
+\end{lstlisting}
+
+and entering your alias as you did in the command line.  To create a alias for all users then add it to the $/etc/bashrc$ file.
+
+%\section{Desktop Shortcut}
+%
+%First we have to install a few things, run the following as a sudo;
+%
+%\begin{lstlisting}
+%apt-get install --no-install-recommends gnome-panel
+%apt-get install nautilus-scripts-manager
+%\end{lstlisting}
+%
+%Now the first command allows us to create a launcher on the desktop, and the second command allows us to do it from the right click menu.  We can also add other scripts to be run from the right click menu.
+%
+%The following command creates the launcher;
+%
+%\begin{lstlisting}
+%gnome-desktop-item-edit ~/Desktop/ --create-new
+%\end{lstlisting}
+%
+%Now to put this on the right click menu we run the following;
+%
+%\begin{lstlisting}
+%gksu nautilus
+%\end{lstlisting}
+%
+%and then navigate to $$usr/share/nautilus-scripts$$
+%
+%Create a new blank document called whatever you want (Something useful like Desktop Launcher) and make it executable. Now add the command that allows us to create the launcher;
+%
+%\begin{lstlisting}
+%gnome-desktop-item-edit ~/Desktop/ --create-new
+%\end{lstlisting}
+%
+%Now open the nautilus script manager and put a check next to your script. Then restart the computer using;
+%
+%\begin{lstlisting}
+%sudo shutdown -r now
+%\end{lstlisting}

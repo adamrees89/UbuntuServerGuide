@@ -1,0 +1,35 @@
+\chapter{Teamspeak Server}
+\section{Set-up}
+
+The following procedure is good for installing a teamspeak server. After installation, most of the configuration is done using the teamspeak client software.  Don't forget to copy the access token for use on your client software as admin.
+
+1. Download the teamspeak server file from the website \vspace{0.25cm}
+
+2.Unpack the file (remember to replace the file name if it is different
+\begin{lstlisting}
+tar xfv teamspeak3-server_linux-x86-3.0.2.tar.gz
+\end{lstlisting}
+
+3. Change directory;
+\begin{lstlisting}
+cd teamspeak3-server_linux-x86
+\end{lstlisting}
+
+4. Now run the binary by typing;
+\begin{lstlisting}
+./ts3server_linux_x86
+\end{lstlisting}
+and stop it using \keys{\ctrl + c}\\
+\\
+5. The server commands are as follows;
+\begin{lstlisting}
+./ts3server_startscript.sh start
+./ts3server_startscript.sh stop
+./ts3server_startscript.sh status
+\end{lstlisting}
+
+Find the internal ip address of the server by typing;\begin{lstlisting}
+ip addr
+\end{lstlisting}\vspace{0.5cm}
+
+Set up a bash file to start, stop or check status of server

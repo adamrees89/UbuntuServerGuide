@@ -1,0 +1,127 @@
+\chapter{Apache}
+\label{apache}
+
+\section{Installation}
+
+Simply run the command;
+
+\begin{lstlisting}
+sudo apt-get install apache2
+\end{lstlisting}
+
+The apache config files may need changing, they are located here;
+
+$$
+/etc/apache2/..
+$$
+
+Opening the \textit{apache2.conf} file, we can see how the documents in the directory relate to each other.
+
+\section{Initial Set up}
+
+Now to just serve one website we can simply add website (http) files to the $/var/www$ folder.
+
+\section{Virtual Hosts}
+\label{sec:v.hosts}
+
+If we want our server to host more than one site, we need to enable virtual hosts.  This can be accomplished in two ways, either;
+
+\begin{itemize}
+\item Each site gets its own IP address, therefore an ethernet card/port for each site
+
+\item Each site gets its own domain name, with one shared IP
+\end{itemize}
+
+The easiest and cheapest way to set up multiple hosts is the second option.
+
+\subsection{Setting up multiple hosts}
+
+So each site needs its own directory within $/var/www/$, for example;
+
+$$
+/var/www/example.com
+$$
+
+Also the directory needs the permissions \textbf{755}, see Subsection~\ref{ssec:fileperm} for how to set this.
+
+Once the directory has been created, we need to tell apache about it;
+
+Copy the default configuration file, renaming it with your site name using the following command;
+
+\begin{lstlisting}
+sudo cp /etc/apache2/sites-available/default /etc/apache2/sites-available/EXAMPLE
+\end{lstlisting}
+
+Now open the config file using nano (See section~\ref{sec:nano})
+
+Editing this file we need to change the following;
+
+\begin{itemize}
+\item Add: 
+	\begin{verbatim}
+	ServerName EXAMPLE.COM
+	\end{verbatim}
+\item Change:
+	\begin{verbatim}
+	DocumentRoot /var/www
+	\end{verbatim}
+	
+	To:
+	\begin{verbatim}
+	DocumentRoot /var/www/EXAMPLE
+	\end{verbatim}
+\end{itemize}
+
+Now with these changes completed, we simply need to activate the site by using;
+
+\begin{lstlisting}
+sudo a2ensite EXAMPLE.COM
+\end{lstlisting}
+
+Where EXAMPLE.COM is the address of the site you set in $ServerName$
+
+Now just restart apache using;
+
+\begin{lstlisting}
+sudo service apache2 restart
+\end{lstlisting}
+
+Rinse and Repeat for additional hosts.
+
+\section{Hardening}
+
+\subsection{Right Users}
+
+Install apache2 under a different user and group to any other service.  Simply check the $/etc/apache2/envvars$ file for the user and group that apache runs under.
+
+\subsection{ServerTokens}
+
+When you have an error with your website, apache attempts to help you by stating the version of apache and the OS that it is running on, we don't really want this because it will help a potential attacker, change the following in the $security$ file in the $/etc/apache2/conf.d$ directory;
+
+\begin{verbatim}
+ServerTokens OS
+\end{verbatim}
+
+To
+
+\begin{verbatim}
+ServerTokens Prod
+\end{verbatim}
+
+Also comment the line that says;
+
+\begin{verbatim}
+ServerSignature On
+\end{verbatim}
+
+and uncomment the line that says;
+
+\begin{verbatim}
+ServerSignature Off
+\end{verbatim}
+
+\subsection{SSL}
+
+\url{https://help.ubuntu.com/community/forum/server/apache2/SSL}
+
+\url{https://www.digitalocean.com/community/tutorials/how-to-set-up-multiple-ssl-certificates-on-one-ip-with-apache-on-ubuntu-12-04}

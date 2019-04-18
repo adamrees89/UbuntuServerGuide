@@ -1,0 +1,353 @@
+\chapter{Creating a new user}
+
+
+\section{Interactive}
+
+This is the easiest way to add an individual user, simply type the following and answer the following prompts;
+
+\begin{lstlisting}
+adduser USERNAME
+\end{lstlisting}
+
+\section{Non-Interactive}
+
+Lets begin by creating a new user;
+
+\begin{lstlisting}
+sudo useradd USERNAME
+\end{lstlisting}
+
+Now this will create a user, but without a home directory or password, and with a not very useful shell... Lets change that!
+
+\begin{lstlisting}
+sudo useradd --shell /bin/bash --home-dir /home/DIRECTORY USERNAME
+sudo passwd USERNAME
+\end{lstlisting}
+
+So this will create a user with a home directory, and the second command will give you the option of giving them a password.
+
+We can change any of the default options, or view them, see table~\ref{tab:useradd} for the options you can change, or type the following to view the default options;
+
+\begin{lstlisting}
+sudo useradd -D
+\end{lstlisting}
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+-D & See list of defaults\\
+--home-dir [HOMEDIRECTORY] & Set home directory\\
+--shell [SHELL] & Set the default shell to be used\\
+--expiredate [EXPIREDATE] & Set expiration date of the account\\
+\hline
+\end{tabular}
+\caption{Table of selected commands for the useradd command}
+\label{tab:useradd}
+\end{table}
+
+\section{Bulk User Creation}
+
+Ok lets say that there is a lot of users to be added, we can simply use a text file to specify the usernames and passwords etc, then tell linux to create the users.
+
+Firsts things first lets create the text file according to table~\ref{tab:usercreationfile};
+
+\begin{verbatim}
+user1:password:1008:1000:User 1:/home/user1:/bin/bash
+user2:password:1009:1000:User 2:/home/user2:/bin/bash
+user3:password:1010:1000:User 3:/home/user3:/bin/bash
+user4:password:1011:1000:User 4:/home/user4:/bin/bash
+user5:password:1012:1000:User 5:/home/user5:/bin/bash
+\end{verbatim}
+
+So to break it down;
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{ccccccc}
+\hline
+username & password & user id & group id & Comment & home directory & shell\\
+\hline
+user1 & password & 1008 & 1000 & User 1 & /home/user1 & /bin/bash\\
+\hline
+\end{tabular}
+\caption{Table showing the construction of text file for user creation}
+\label{tab:usercreationfile}
+\end{table}
+
+After creating the file (Let's say its called userfile) we simply run
+
+\begin{lstlisting}
+sudo newusers USERFILE
+\end{lstlisting}
+
+%---------------------------------------------------
+
+\chapter{Multiple User Security}
+
+With multiple users its hard to see what their doing, so you can set their permissions to what ever you want, but what about users with sudo permissions?
+
+\section{Sudo logging}
+
+By default the system logs sudo uses to $/var/log/auth.log$ but what if we want a dedicated log just for sudo uses?  Simply edit the sudo file;
+
+\begin{lstlisting}
+sudo nano /etc/sudoers
+\end{lstlisting}
+
+Then add the following line;
+
+\begin{verbatim}
+Defaults        logfile=/var/log/sudo.log
+\end{verbatim}
+
+You can then read the sudo log by simply using;
+
+\begin{lstlisting}
+sudo cat /var/log/sudo.log
+\end{lstlisting}
+
+\section{File Permissions}
+\label{ssec:fileperm}
+
+File permissions are pretty straight forward, every file/folder/drive is considered as a file and has permission as follows;
+
+$$
+OWNER/GROUP/OTHER
+$$
+
+Setting the file permissions can be done in two ways, either using letters (wrx) or numbers.  For ease of use the number method will be covered here.
+
+To show the permissions of files in a directory, navigate to that directory and type;
+
+\begin{lstlisting}
+ls -l
+\end{lstlisting}
+
+You will be presented with the permissions of those files, the permissions will be presented as a string of letters, these correlate to table~\ref{tab:permissions}.  A typical string for a file may look like;
+
+\begin{verbatim}
+-rwxr-xr-x
+\end{verbatim}
+
+Where this would mean that the file is not a directory (the first hyphen), the owner can read, write and execute the file, the owners group can only read and execute the file, and all others can read and execute the file.
+
+Now for a directory the permissions vary slightly, taking the last example a directory with the same permissions would look like;
+
+\begin{verbatim}
+drwxr-xr-x
+\end{verbatim}
+
+File permissions can be changed using the following command;
+
+\begin{lstlisting}
+chmod PERMISSIONS FILENAME
+\end{lstlisting}
+
+To set the permissions we enter a three digit number in the order mentioned earlier (owner/group/other).  The numbers correlate to table~\ref{tab:permissions};
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cccc}
+\hline
+System & Read & Write & Execute\\
+\hline
+Number Based & 4 & 2 & 1\\
+Letter Based & r & w & x\\
+\hline
+\end{tabular}
+\caption{File permissions in the two accepted formats used by Ubuntu}
+\label{tab:permissions}
+\end{table}
+
+So for our test file, we want the owner to be able to do all three; $4+2+1=7$, the group to be able to read and execute; $2+1=3$, and others to just execute; $1$.  The permissions will be set as follows;
+
+\begin{lstlisting}
+chmod 731 testfile
+\end{lstlisting}
+
+Now confirm the change by running;
+
+\begin{lstlisting}
+ls -l
+\end{lstlisting}
+
+\subsection{Permissionless files}
+
+A big security flaw is files with no owner or group, as anyone can write and read or execute these files.
+
+Run the following as sudo;
+
+\begin{lstlisting}
+sudo find / -xdev \( -nouser -o -nogroup \) -print
+\end{lstlisting}
+
+It will take a while, but it will list all the files with no user or group.
+
+
+
+\chapter{User Management}
+\label{chp:user}
+
+So as a server there may be more than one user able to connect to it, and do various things... This chapter will show you how to manage your users.
+
+First things first there are usually only two users when you install a linux system (apart from the software/daemon usernames) and these are \textbf{root} and \textbf{you}.  The you user is the one that you created upon install, and the root user is by default the one you use when using 'sudo'.  The root user does not come with a password as by default it is locked... (See section~\ref{sec:lckpass}).
+
+\section{Listing all the human users of a linux box}
+\label{sec:listusers}
+
+It's a simple bit of code, but long;
+
+\begin{lstlisting}
+cat /etc/passwd | grep /bin/bash
+\end{lstlisting}
+
+Why not add it to your bashrc file as an alias (See section~\ref{sec:alias}).  The line you need to add is something like;
+
+\begin{lstlisting}
+alias listusers='cat /etc/passwd | grep /bin/bash'
+\end{lstlisting}
+
+\section{Forcing password policies}
+
+So lets say we run a really secure system where the users have to change their passwords every x number of days... Lets say in 30 days, bob will have to change his password, for this example...
+
+\begin{lstlisting}
+sudo chage -M 30 bob
+\end{lstlisting}
+
+This sets the password for bob to expire in 30 days.
+
+Now we want to be nice to bob, so lets warn him a week before that his password will expire;
+
+\begin{lstlisting}
+sudo chage -M 30 -W 7 bob
+\end{lstlisting}
+
+So this means that seven days before the password expires he will have the chance to change his password. After 30 days the account will lock because there will be no password on it.
+
+\subsection{Change password on first/next login}
+
+So lets say you've created a new user, but have given them an easy to remember password \textit{(password1)}...? We need them to change it the first time they log in, luckily this is one lines worth of command;
+
+\begin{lstlisting}
+sudo chage -d 0 USER
+\end{lstlisting}
+
+\section{Adding Users to groups}
+
+If you need to create a group then use the following;
+
+\begin{lstlisting}
+sudo groupadd GROUPNAME
+\end{lstlisting}
+
+Verify it exists with;
+
+\begin{lstlisting}
+grep GROUPNAME /etc/group
+\end{lstlisting}
+
+Now if the user exists, we can use the following to add the user to an existing group;
+
+\begin{lstlisting}
+sudo usermod -a -G GROUPNAME EXISTINGUSER
+\end{lstlisting}
+
+However if the user does not exist then use the following to create the user and add them to groups;
+
+\begin{lstlisting}
+sudo useradd -G GROUPNAME NEWUSER
+\end{lstlisting}
+
+\subsection{Difference between Primary and Secondary Groups}
+
+Most of the differences come from file creation, these are explained below...
+
+\subsubsection{Primary Groups}
+
+When a user creates a new file, the group that the file belongs to is the same as the users primary group.  This means that any other members of that group can view the file.
+
+\subsubsection{Secondary Groups}
+
+When a user creates a file it does not belong to the secondary groups of the user, however any files that do belong to the secondary group can be viewed.  See the section of file permissions for more detail (Subsection~\ref{ssec:fileperm}).
+
+\section{Locking/Unlocking Accounts}
+\label{sec:lckpass}
+
+If you want to set a users account to locked, then all you need to do is run the following;
+
+\begin{lstlisting}
+sudo passwd -l USERNAME
+\end{lstlisting}
+
+To unlock then simply use;
+
+\begin{lstlisting}
+sudo passwd -u USERNAME
+\end{lstlisting}
+
+\section{Changing User Details}
+
+There's a comment field in the output of the password file, its shown when you run the command in section~\ref{sec:listusers}.
+
+Anyway a good thing to include here is the user details such as;
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Full Name & Telephone Number & Room Number/Location & Other\\
+\hline
+\end{tabular}
+\end{table}
+
+We change this by running the code below;
+
+\begin{lstlisting}
+sudo usermod --comment 'NAME,PHONE,ROOM,OTHER' USERNAME
+\end{lstlisting}
+
+This will then change the comment section in the user details.
+
+\section{Remotely log-off other users}
+
+First we need to see who is logged in type the following;
+
+\begin{lstlisting}
+w
+\end{lstlisting}
+
+This will list all the users that are currently logged in. Now we can either logout users by their username, or where they are logged in.
+
+\subsection{By User-name}
+
+This is the easy one, simply type;
+
+\begin{lstlisting}
+sudo pkill -KILL -u USER
+\end{lstlisting}
+
+This will kill the session of USER (Hence the options \textit{-KILL} and \textit{-u}).
+
+\subsection{By controlling terminal}
+
+So looking at my output from w;
+
+\begin{verbatim}
+bob@server:~$ w
+ 15:41:28 up  4:39,  3 users,  load average: 0.00, 0.01, 0.05
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+bob     tty1                      15:39    4:39m  0.30s  0.15s -bash
+bob     pts/0    en016029.swan.ac 15:38    3:24   0.15s  0.00s w
+\end{verbatim}
+
+We can see that I am logged in to tty1. Lets force a log out;
+
+\begin{lstlisting}
+sudo pkill -KILL -t tty1
+\end{lstlisting}
+
+Now this forces a logout to anyone connected to tty1.

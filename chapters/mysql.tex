@@ -1,0 +1,116 @@
+\chapter{MySql}
+\label{chp:mysql}
+
+Simply run the command;
+\begin{lstlisting}
+sudo apt-get install mysql-server
+\end{lstlisting}
+
+And remember the password and username specified during installation.
+
+Most programs that require the use of MySql will create and manage their own databases.
+\vspace{2cm}
+\textbf{IMPORTANT} Do not run MySql under the same user and group as apache, as an attack on one, could leave the other vulnerable.
+
+\url{http://www.cyberciti.biz/faq/mysql-command-to-show-list-of-databases-on-server/}
+
+\url{http://www.bios.niu.edu/johns/bioinform/mysql_commands.htm}
+
+\subsection{MySQL basic commands}
+
+Here are a list of basic commands for MySQL. Note the semicolon at the end of each command.
+
+\begin{table}[htb]
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+SHOW DATABASES; & Lists all databases in MySQL\\
+USE [NAME]; & Switches to specified database\\
+quit; & Quit from MySQL\\
+\hline
+\end{tabular}
+\caption{Table of Basic commands for MySQL}
+\label{tab:mysqlComm}
+\end{table}
+
+\subsection{Reset mysql root password}
+\label{sec:mysqlresetpass}
+
+Sometime we forget passwords, so it is important we know how to change them, here is a six part solution to change the password of the mysql root user.
+
+\subsubsection{Stop MySQL}
+
+\begin{lstlisting}
+sudo service mysql stop
+\end{lstlisting}
+
+\subsubsection{Start in safe mode}
+
+\begin{lstlisting}
+sudo mysql_safe --skip-grant-tables &
+\end{lstlisting}
+
+\subsubsection{Then change database}
+
+\begin{lstlisting}
+use mysql;
+\end{lstlisting}
+
+\subsubsection{Change Password}
+
+Change the password using the following, and putting a new password instead of newpasswordhere below.
+
+\begin{lstlisting}
+update user set password=PASSWORD ("newpasswordhere") where User = 'root';
+\end{lstlisting}
+
+\subsubsection{flush privileges \& quit}
+
+\begin{lstlisting}
+flush privileges;
+quit;
+\end{lstlisting}
+
+\subsubsection{Restart MySQL}
+
+\begin{lstlisting}
+sudo service mysql restart
+\end{lstlisting}
+
+\subsection{Backup and Restore MySQL databases}
+\label{ssec:mySQLBackup}
+
+\url{http://webcheatsheet.com/sql/mysql_backup_restore.php}
+
+In this section we will see how to backup and restore the mysql databases.
+
+\subsubsection{Backing up}
+
+Before logging in to mysql, run the following commands:
+
+\begin{lstlisting}
+mysqldump -u [USERNAME] -p [DATABASE NAME] > [BACKUPFILE.sql]
+\end{lstlisting}
+
+Don't put the square brackets in the command, and replace where necessary, you will be asked for your password after running the command.
+
+You can backup multiple databases at once by separating them with a space.
+
+This command will lock out users when it is running, unless you have a very large database, you shouldn't need to worry.
+
+\subsubsection{Restoring a Backup}
+
+There are two ways to restore, one to add a backup database into a new install (effectively creating a new database with the old data), and one to overwrite an existing database.
+
+To simply add the backup database to mysql where it didn't exist before run the following:
+
+\begin{lstlisting}
+mysql -u [USERNAME] -p [DATABASE NAME] < [BACKUPFILE.sql]
+\end{lstlisting}
+
+However if the database does exist but you wish to overwrite the data, simply type:
+
+\begin{lstlisting}
+mysqlimport -u [USERNAME] -p [DATABASE NAME] [BACKUPFILE.sql]
+\end{lstlisting}

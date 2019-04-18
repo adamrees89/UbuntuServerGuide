@@ -1,0 +1,44 @@
+\chapter{Basics}
+
+In this chapter the methods of uninstalling programs from Ubuntu.
+
+\section{Program Uninstallation}
+
+So there are two ways to uninstall any program such as the ones we installed in this guide.
+
+The first;
+\begin{lstlisting}
+sudo apt-get remove [PROGRAM]
+\end{lstlisting}
+
+and the second;
+\begin{lstlisting}
+sudo apt-get purge [PROGRAM]
+\end{lstlisting}
+
+Now they basically do the same thing, with the exception that the purge command also removes the configuration files associated with the program, freeing up more space.  However this means that you have to completely re-configure any software that you have purged if you re-install it.
+
+\section{Startup Removal}
+
+In the Subversion Chapter (Section~\ref{sec:subaccess}) we added a new script to the init.d directory and told ubuntu that we want to run that script on startup.  So to start we stop the script being executed, and then remove it from the init links.
+
+\begin{lstlisting}
+sudo chmod -x [SCRIPT]
+sudo rm [SCRIPT]
+sudo update-rc.d -f [SCRIPT] remove
+\end{lstlisting}
+
+After this a simple reboot of the system should stop any unwanted server processes.
+
+\section{Group/User Removal}
+
+In certain installations its good practice to create a group or user for the server to run as for security, however when you uninstall said program you need to get rid of the user or group, do this by using one of the following;
+
+\begin{lstlisting}
+deluser [username]
+delgroup [groupname]
+\end{lstlisting}
+
+\section{Nuclear Option}
+
+If you want to really start from scratch then the best way to do this is to completely reinstall Ubuntu wiping the current installation. This should also be done each time the OS is upgraded.

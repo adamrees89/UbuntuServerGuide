@@ -1,0 +1,136 @@
+\chapter{Minecraft Server}
+\label{chp:minecraft}
+
+\section{Updating Java}
+
+The next set of commands are run with root privileges, run the following code;
+
+In order to ensure that the java environment is correct, run the command;
+\begin{lstlisting}
+java -version
+\end{lstlisting}
+
+Do the following:
+
+\begin{lstlisting}
+update-java-alternatives -l
+\end{lstlisting}
+
+This will list off all the various Java VMs that are installed.
+
+\begin{lstlisting}
+# update-java-alternatives -l
+java-6-openjdk 1061 /usr/lib/jvm/java-6-openjdk
+java-6-sun 63 /usr/lib/jvm/java-6-sun
+\end{lstlisting}
+
+Next set the proper Java VM to use by typing the following;
+
+\begin{lstlisting}
+update-java-alternatives -s java-6-sun
+\end{lstlisting}
+
+Now, run 
+\begin{lstlisting}
+java -version
+\end{lstlisting}
+
+It should show the same version information as before.\\
+\textit{The rest of these commands are run without root privileges.}
+
+\section{Installing Minecraft Server}
+
+Now download the server file from the minecraft website, and place it into the home directory
+
+To start the server, you will need to use the following command:
+\begin{lstlisting}
+java -Xmx1024m -Xms1024m -jar minecraft_server.jar nogui
+\end{lstlisting}
+
+Once all the text has finished, it will have created a new world file.  Now force the server to save the files and stop.
+
+\begin{lstlisting}
+save-all
+\end{lstlisting}
+which forces the server to save the generated map, then
+\begin{lstlisting}
+stop
+\end{lstlisting}
+to shut the server down.
+
+\section{Stopping and Starting the server}
+
+To start the server, first off make sure you are in a screen session by typing 
+\begin{lstlisting}
+screen -list
+\end{lstlisting}
+like below:
+\begin{lstlisting}
+mcserver@mcserver:~$ screen -list
+There is a screen on:
+ 2434.tty1.mcserver        (01/09/2011 12:58:57 PM)        (Attached)
+1 Socket in /var/run/screen/S-mcserver.
+\end{lstlisting}
+
+This indicates that you have screen session.  If you the console says that no screens are running then type;
+\begin{lstlisting}
+screen
+\end{lstlisting}
+to start one.
+
+Once in the screen session, type in the command shown below.
+\begin{lstlisting}
+java -Xmx1024m -Xms1024m -jar minecraft_server.jar nogui
+\end{lstlisting}
+To disconnect from the screen session, hit \keys{\ctrl + a} and then the \keys{d} key, this will drop back to the shell prompt where to exit simply type;
+\begin{lstlisting}
+exit
+\end{lstlisting}
+to logout. The Minecraft Server will continue to run.
+
+To reconnect with the screen session, type in
+\begin{lstlisting}
+screen -r
+\end{lstlisting}
+You will be reconnected to the server and can then perform the following commands:
+\begin{lstlisting}
+say Server is going down
+
+save-all
+
+stop
+\end{lstlisting}
+This tells the Minecraft Server to save, shutdown and exit, and tell all the users that it is doing so.
+
+\section{Useful commands in MC Server}
+
+Table~\ref{tab:useful_mc} contains some of the useful commands for maintaining a minecraft server.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Command & Description\\
+\hline
+help  or  ? & shows this message\\
+kick \textit{player} & removes a player from the server\\
+ban \textit{player} & bans a player from the server\\
+pardon \textit{player} & pardons a banned player so that they can connect again\\
+ban-ip \textit{ip} & bans an IP address from the server\\
+pardon-ip \textit{ip} & pardons a banned IP address so that they can connect again\\
+op \textit{player} & turns a player into an op\\
+deop \textit{player} & removes op status from a player\\
+tp \textit{player1} \textit{player2} & moves one player to the same location as another player\\
+give \textit{player} \textit{id} [num] & gives a player a resource\\
+tell \textit{player} \textit{message} & sends a private message to a player\\
+stop & gracefully stops the server\\
+save-all & forces a server-wide level save\\
+save-off & disables terrain saving\\
+save-on & re-enables terrain saving\\
+list & lists all currently connected players\\
+say \textit{message} & broadcasts a message to all players\\
+\hline
+\end{tabular}
+\caption{Useful Commands for Minecraft Server}
+\label{tab:useful_mc}
+\end{table}

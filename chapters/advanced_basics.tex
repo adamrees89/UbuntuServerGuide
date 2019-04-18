@@ -1,0 +1,299 @@
+\chapter{Advanced}
+\label{chp:adv_basic}
+
+\todo[inline,color=blue!40]{http://superuser.com/questions/437330/how-do-you-add-a-certificate-authority-ca-to-ubuntu  Add a CA certificate to the certificate store}
+
+In this section you will find all the topics that I have not really needed until later on, or when setting up more advanced servers, i.e. those with RAID, multiple hard drives etc.
+
+\section{Mounting Windows/Samba Shares}
+\label{sec:mount_samba}
+
+There is sometimes a need to mount an external windows-compatible share on our server.  In this section we can see how to do that;
+
+\subsection{Temporary Mounting}
+
+We are going to use \textit{smbclient}, and then \textit{mount} for this.  First things first we are going to check if we can see the external server share;
+
+\begin{lstlisting}
+smbclient -L //SERVERNAME/FOLDER
+\end{lstlisting}
+
+If you are successful you should see a list of the shares available to you.
+
+Now lets actually connect to our share;
+
+\begin{lstlisting}
+smbclient //SERVERNAME/SHARE -U username
+\end{lstlisting}
+
+You should be prompted for the password, simply enter your password and then, (fingers crossed) you should be presented with the smb environment where you can do various things.
+
+The easiest way to connect to a share using our server is to use the mount command, we type the following;
+
+\begin{lstlisting}
+sudo mount -t cifs //SERVERNAME/SHARE /MOUNT/POINT -o username=USERNAME, noexec
+\end{lstlisting}
+
+This will mount the share as if it were a usb drive or similar.  You can then interact with it using the ubuntu file system at $/MOUNT/POINT$
+
+\subsection{Permanent Mounting}
+
+Once you are happy with mounting the share, then we can add it to the fstab and get it to mount automatically, simply add the following line to your fstab file ($/etc/fstab$)
+
+\begin{verbatim}
+//SERVERNAME/SHARE /MOUNT/POINT cifs credentials=CREDFILE 0 0
+\end{verbatim}
+
+Where CREDFILE is the path to a file containing the username and password in the form;
+
+\begin{verbatim}
+username=USERNAME
+password=PASSWORD
+\end{verbatim}
+
+For a more in-depth explanation of fstab see section~\ref{ssec:permanentHDMount}.
+
+
+\section{Monitoring Computer Physical Properties}
+\label{sec:physicalmon}
+
+So if you have a mission critical server, or just an linux box sat under your desk, you may want to know just how hot it is inside the case.  We can do this with the sensors package.
+
+Simply install using:
+
+\begin{lstlisting}
+sudo apt-get install lm-sensors
+\end{lstlisting}
+
+After this is finished we have to run the set up tool:
+
+\begin{lstlisting}
+sudo sensors-detect
+\end{lstlisting}
+
+There will be a lot of questions asked, its usually fine to just hit enter to all of them (you may be there a while).
+
+Now once this has been completed, you need to run:
+
+\begin{lstlisting}
+sudo service kmod start
+\end{lstlisting}
+
+In order to read the changes to the kernel modules, or you could just restart the system!
+
+To read the output from the sensors found you can simply type:
+
+\begin{lstlisting}
+sensors
+\end{lstlisting}
+
+and it will give you an instantaneous reading of all the sensors available.  If you would like to constantly poll the system for its temperatures you can use the watch function as mentioned in section~\ref{sec:watch}, chapter~\ref{chp:first}.  The command for watching the sensors output every two seconds would be:
+
+\begin{lstlisting}
+watch sensors
+\end{lstlisting}
+
+
+\section{Symbolic Links and bind mounts}
+\label{sec:symlink}
+
+Symbolic links and bind mounts are similar to a short-cut in Windows.  From the command line it appears as if it is a file/folder and can be interacted as if the file/folder is located where you have put it.  For example, I have a file here;
+
+\menu[,]{/, scripts}
+
+but for simplicity I want to link a folder in my home directory to this folder so I can get to it quicker... So I want it here;
+
+\menu[,]{home,adam,scripts}
+
+\subsection{Symbolic Links}
+
+Symbolic links come in two flavours, soft or hard.\footnote{For more information I read this site: \url{http://linuxgazette.net/105/pitcher.html}}
+
+\subsubsection{Soft Symbolic Links}
+
+Soft links reference the path to another file, behaving as if they are a sign post to the os as to which file to open.  To create a soft symbolic link between $orig\_file$ and $link\_file$ we type the following;
+
+\begin{lstlisting}
+ln -s /path/to/orig_file /path/to/link_file
+\end{lstlisting}
+
+
+\subsubsection{Hard Symbolic Links}
+
+Hard links reference the actual data, not the path, and so they will share the same permissions and data as the actual file. However hard links have to exist on the same file system as the original file, whereas soft links do not. To create a hard link between the files mentioned in the previous example we use;
+
+\begin{lstlisting}
+ln /path/to/orig_file /path/to/link_file
+\end{lstlisting}
+
+\subsection{Bind mounts}
+
+Now bind mounts behave in a similar way to the symbolic links, however there are some advantages/disadvantages to both. Read up and decide on which you need. There is an easy way to think of bind mounts as mounting a directory instead of a hard drive (See section~\ref{sec:mount_hd}. To create a bind mount we simply type;
+
+\begin{lstlisting}
+mount --bind /path/to/orig_file path/to/link_file
+\end{lstlisting}
+
+This works but will the link be deleted on system restart. To get a persistent link we can add the following to $/etc/fstab$;
+
+\begin{lstlisting}
+/path/to/orig_file   /path/to/link_file  none    bind  0 0
+\end{lstlisting}
+
+\section{Software RAID - \textit{INCOMPLETE}}
+
+
+
+\section{Unattended Upgrades}
+
+Ubuntu servers come packaged with a package based installation/updating system.  As wonderful as this is, it may be tedious to type the update commands into the command line interface just to update the system.  So there is another package for automatically updating these packages.  \textit{Uattended Upgrades} does precisely this.  To install this simply type the following:
+
+\begin{lstlisting}
+sudo apt-get install unattended-upgrades
+\end{lstlisting}
+
+We need to then configure the system to perform the upgrades, use the following commands:
+
+\begin{lstlisting}
+sudo nano /etc/apt/apt.conf.d/50unattended-upgrades
+\end{lstlisting}
+
+Then uncomment the upgrades that you would like the system to install.  \textit{(Comments are put into this file by using \textbf{'//'}}
+
+
+\subsection{Notifications}
+
+If you have set up \textit{ssmtp} or another Mail Delivery Agent \textit{(MTA)}, like in section~\ref{sec:ssmtp}.  Then an additional package can be used to send you notifications by email.  Simply install the package using the following:
+
+\begin{lstlisting}
+sudo apt-get install apticron
+\end{lstlisting}
+
+Then edit the configuration file using:
+
+\begin{lstlisting}
+sudo nano /etc/apticron/apticron.conf
+\end{lstlisting}
+
+Now set the email address at the top.
+
+\begin{verbatim}
+EMAIL="your_email_address"
+\end{verbatim}
+
+
+\section{SysRq Key}
+
+The SysRq key, normally located at the top of your keyboard, on the same key as Print Screen.  Now if you are on your brand new linux computer and it completely locks up, you can use the SysRq key to sort yourself out.  We can 'un-stick' our computer by holding~\keys{\Alt + SysRq} then pressing each key in order for a second or two, with a break in-between keys.
+
+In order;
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Key & Action\\
+\hline
+\keys{r} & Keyboard into \textbf{r}aw mode\\
+\keys{e} & Gracefully \textbf{e}nd all processes\\
+\keys{i} & Kill all processes \textbf{i}mmediately\\
+\keys{u} & Flu\textbf{s}h data to disk\\
+\keys{s} & Remo\textbf{u}nts all file systems as read only\\
+\keys{b} & Re\textbf{b}oots your computer\\
+\hline
+\end{tabular}
+\caption{Table of SysRq keys and meaning}
+\label{tab:sysrq}
+\end{table}
+
+
+\section{Automatic log on to command line interface}
+
+\textbf{\textit{Important}} - It is wise to read the security chapter first and understand the ethos described in that chapter.  Automatic log on is very convenient, and if your server is for your home then I am sure it will be fine.  However bear in mind that once your account is logged in automatically then there is no password authentication stopping anyone from using your server.  Although the sudo password will not be given there are plenty of things that can be achieved with out sudo privileges that you would not want happening to your server... \textit{Be Warned}
+
+After disabling the graphical interface we simply edit the configuration file for the first command line interface instance. The config file is stored here $/etc/init/tty1.conf$.  In the last line of the file where the command \textit{'exec'} is called we add the following;
+
+\begin{lstlisting}
+-a user 1
+\end{lstlisting}
+
+So that the line reads;
+
+\begin{lstlisting}
+exec /sbin/getty -a [user1] -8 38400 tty1
+\end{lstlisting}
+
+And this will log the user in automatically to the command line interface (cli)
+
+\section{Disabling Graphical Display for Servers}
+
+Now I'm not a big fan of removing the graphical log in because every now and then I like to hook the server up to a monitor and check everything is OK...  However to improve the servers performance then disabling it will save a few bytes of RAM... and some CPU!
+
+Run the following commands to disable the graphical display.
+
+\begin{lstlisting}
+sudo nano /etc/default/grub
+\end{lstlisting}
+
+Uncomment the line
+
+$$GRUB\_TERMINAL=console$$
+
+Then run;
+
+\begin{lstlisting}
+sudo update-grub
+\end{lstlisting}
+
+\section{Disable the Case power button}
+
+Sometimes you want to disable the power button, just because it is within reach of naughty fingers...
+
+
+Navigate to;
+
+$$
+/etc/acpi
+$$
+
+And run the following;
+
+\begin{lstlisting}
+sudo mv powerbtn.sh powerbtn.sh.orig
+sudo ln -s /bin/false /etc/acpi/powerbtn.sh
+\end{lstlisting}
+
+When your power button is pressed it calls the $/etc/acpi/powerbtn.sh$ script. By moving the script and creating a symbolic link to the $/bin/false$ file, we tell ubuntu to do nothing when the button is pressed.
+
+See Section~\ref{sec:symlink} for more information on symbolic links.
+
+\section{De-fragmentation of Hard Drive}
+
+Linux has a few tools built in to de-fragment (defrag) the hard drive, but first we should see if it is needed.  Windows users will know that occasionally you will need to defrag as your hard drive fills up, as a linux user it is claimed that you will not need to defrag at all, but it always better to check and run it if need be.  Run the following as super user to see how fragmented our hard drive is:
+
+\begin{lstlisting}
+e4defrag -c /
+\end{lstlisting}
+
+This command is for a ext4 file system.  Once the command has completed it will show you how fragmented the hard drive is by giving a fragmentation score.  Using the legend at the bottom of the output, determine if you would benefit from a defrag procedure.  If so run the following as root:
+
+\begin{lstlisting}
+efdefrag /
+\end{lstlisting}
+
+\vspace*{0.5cm}
+\begin{minipage}{0.3\textwidth}
+\begin{flushleft} 
+\includegraphics[width=0.9\textwidth]{./supportfiles/point.jpg}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\begin{flushright}
+\hrule
+\vspace*{0.25cm}
+\textit{For some background information visit this site: \url{http://jsmylinux.no-ip.org/performance/using-e4defrag/}}
+\vspace{0.25cm}
+\hrule
+\end{flushright}
+\end{minipage}
+\vspace*{0.5cm}
