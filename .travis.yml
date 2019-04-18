@@ -1,0 +1,36 @@
+os: linux
+
+# we use the R VM because it contains LaTeX and pandoc
+language: r
+
+# we need super user privileges, so we depend on the old travis-ci infrastructure
+sudo: required
+
+# we can install additional software
+apt_packages:
+# we download pdf2djvu to also generate a djvu file of our LaTeX source
+  - pdf2djvu
+
+script:
+# in the next step we use pdflatex to convert .tex to .pdf
+  - pdflatex -interaction=nonstopmode "Server Set ups.tex"
+  - pdflatex -interaction=nonstopmode "Server Set ups.tex"
+
+deploy:
+
+# provider releases means GitHub Releases
+  provider: releases
+  api_key: ${GITHUB_TOKEN}
+
+# Travis CI public key encrypted GitHub oauth key for pushing to GitHub Releases
+    secure: UNfN17F/m8PSbbU53/xHGqySzA/pyyrWIc42o6Mnb3EzOMlAhTLsHvnOTw8L27KEeszyZJp8TcyG0PCnFfTgzV3gWMc1tweLnPBwWYj+qFWqQyqc8pkG4xfMrEAfbFk20sYGQYoRnaws85uc/nCcXNhVKvcFMCaZUYcxJKV/Kdass4rsfc205nRqvXa3unWlg51YzNtAB2glGbhe9/Rw6SeeTJiUmcjWKPDEhTfCTF8X0d4QaM6RiDly+Vfzv9POf+FRk8HWrmiImxguxepHhb5Ellz7hPZlTQ6iEb+igzde7jxxUKc4otFSrDG45TLoQ8BKsf32AMUo/JjXMT29H2alEF3P/6pSaev2M9gyVsQbzCfxUQOUn5HilY0D3khEIiT1smK0LrQPrQcarldN4BLJm/WG9pzsjKOp3PZQ6Afy1TOG2LPJv+xOIJFhYHNQSp+jjRaPLxbDwcZfxGFPPTDJ2xJvPEoNjL3vT1bdppGgopZxShqmxxzolBMoG0Y+H87DKu7Zv8u3yyjxneP1dhb+StsTLS7GzahD3J2WjHos9UYZV2BGitMyy2j7GJQ5+oPBH3HdoiLjU8BcTOOQ7ZX6xDxBaA9MyT+Q6pYFuxpZkbmB/7GZFnizP7Hpf5WExGVIqlIeYM6zZSaha49SPWxdQSHDLZTUHVGcG4tDbLY=
+
+# the list of files to upload
+  file: 
+    - "Server Set ups.pdf"
+  
+  skip_cleanup: true
+  draft: true
+  on:
+    tags: true
+    repo: adamrees89/UbuntuServerGuide/
