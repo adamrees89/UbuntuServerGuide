@@ -14,6 +14,6 @@ before_script: cd $TRAVIS_BUILD_DIR/src/
 script:
 # texliveonfly will download packages automatically, running pdflatex by default. Change compiler with e.g. --compiler=lualatex, when using latexmk don't forget to add the latexmk package to texlive_packages and specify the "-pdf" argument like this:
 #- texliveonfly --compiler=latexmk --arguments="-pdf" ./main.tex
-- texliveonfly --arguments="--shell-escape" ./main.tex
+- texliveonfly --arguments="--shell-escape" ./Server Set ups.tex
 # Compile twice to fix possible references
-- texliveonfly --arguments="--shell-escape" ./main.tex
+- texliveonfly --arguments="--shell-escape" ./Server Set ups.tex
