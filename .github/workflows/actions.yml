@@ -8,7 +8,7 @@ jobs:
       - name: LaTeX Action
         uses: fudan-mse/latex-action@v0.0.1
         with:
-          root_file: main.tex
+          root_file: Server Set ups.tex
           working_directory:
           compiler:
           args:
