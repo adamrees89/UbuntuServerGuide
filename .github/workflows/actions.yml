@@ -1,16 +1,27 @@
-on: ["pull_request"]
+name: Build PDF from LaTeX
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: LaTeX Action
-        uses: fudan-mse/latex-action@v0.0.1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up LaTeX
+        uses: fudan-mse/latex-action@v1
         with:
-          root_file: Server Set ups.tex
-          working_directory:
-          compiler:
-          args:
-          extra_packages:
-          extra_system_packages:
+          root_file: 'Server Set ups.tex'
+
+      - name: Commit and push PDF
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add '*.pdf'
+          git commit -m 'Build PDF from LaTeX [skip ci]'
+          git push
+
