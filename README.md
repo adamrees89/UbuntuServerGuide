@@ -43,7 +43,6 @@ A typical build flow is:
 
 ```bash
 cd <repo-root>
-cd templates
 pdflatex 'Server Set ups.tex'
 ```
 

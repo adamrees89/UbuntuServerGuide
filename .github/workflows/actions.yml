@@ -31,7 +31,7 @@ jobs:
         run: |
           chmod +x texlive/texlive_install.sh
           ./texlive/texlive_install.sh
-          echo "/tmp/texlive/bin/x86_64-linux" >> $GITHUB_PATH
+          echo "/tmp/texlive/bin/$(uname -m)-linux" >> $GITHUB_PATH
 
       - name: Generate pdfs 
         run: |
