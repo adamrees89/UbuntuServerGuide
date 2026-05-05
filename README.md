@@ -1,3 +1,5 @@
+[![Build PDF from LaTeX](https://github.com/adamrees89/UbuntuServerGuide/actions/workflows/actions.yml/badge.svg)](https://github.com/adamrees89/UbuntuServerGuide/actions/workflows/actions.yml)
+
 # Ubuntu Server Guide
 
 A LaTeX book documenting my Ubuntu server learning journey.
@@ -41,7 +43,6 @@ A typical build flow is:
 
 ```bash
 cd <repo-root>
-cd templates
 pdflatex 'Server Set ups.tex'
 ```
 
