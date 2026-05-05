@@ -1,3 +1,4 @@
+adjustbox
 amsfonts
 amsmath
 booktabs
@@ -21,6 +22,7 @@ multirow
 pdfpages
 pgf
 pgfplots
+relsize
 setspace
 todonotes
 xcolor
