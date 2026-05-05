@@ -31,11 +31,23 @@ jobs:
           export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
           latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error "Server Set ups.tex"
 
-      - name: Commit and push PDF to repo
-        if: github.ref == 'refs/heads/master'
+      - name: Commit PDF to a new branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b pdf-update-${GITHUB_RUN_ID}
           git add "Server Set ups.pdf"
           git commit -m "Auto-update PDF [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin pdf-update-${GITHUB_RUN_ID}
+
+
+      - name: Create Pull Request for PDF update
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: pdf-update-${{ github.run_id }}
+          title: "Auto-update PDF"
+          body: "This PR was created automatically by GitHub Actions to update the PDF."
+          commit-message: "Auto-update PDF [skip ci]"
+          author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+
+
