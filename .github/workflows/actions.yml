@@ -32,6 +32,13 @@ jobs:
           chmod +x texlive/texlive_install.sh
           ./texlive/texlive_install.sh
           echo "/tmp/texlive/bin/$(uname -m)-linux" >> $GITHUB_PATH
+      
+      - name: Check TeX Live installation
+        run: |
+          which pdflatex || true
+          pdflatex --version || true
+          tlmgr --version || true
+          tlmgr option repository || true
 
       - name: Generate pdfs 
         run: |
