@@ -44,7 +44,7 @@ jobs:
       - name: Generate pdfs 
         run: |
               cd "$GITHUB_WORKSPACE"
-              texliveonfly -c latexmk -pdf -interaction=nonstopmode -halt-on-error "Server Set ups.tex"
+              latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error "Server Set ups.tex"
         
       - name: Commit and push PDFs
         run: |
