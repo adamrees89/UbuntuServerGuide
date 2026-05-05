@@ -1,6 +1,9 @@
 name: Build PDF from LaTeX
 
-on: ["pull_request"]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
