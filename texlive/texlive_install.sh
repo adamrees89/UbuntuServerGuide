@@ -1,48 +1,43 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Originally from https://github.com/latex3/latex3
+# Always run relative to repository root
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$REPO_ROOT"
 
-# This script is used for building LaTeX files using Travis
-# A minimal current TL is installed adding only the packages that are
-# required
+export TEXLIVE_DIR="/tmp/texlive"
+export PATH="$TEXLIVE_DIR/bin/x86_64-linux:$PATH"
 
-# See if there is a cached version of TL available
-export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
-if ! command -v texlua > /dev/null; then
-  # Obtain TeX Live
-  wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+# Install TeX Live if not present (cache-friendly)
+if ! command -v texlua >/dev/null 2>&1; then
+  echo "TeX Live not found in PATH, installing to $TEXLIVE_DIR"
+
+  curl -L -o install-tl-unx.tar.gz \
+    "https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
+
   tar -xzf install-tl-unx.tar.gz
-  cd install-tl-20*
-
-  # Install a minimal system
-  ./install-tl --profile=../texlive/texlive.profile
-
-  cd ..
+  cd install-tl-20*/
+  ./install-tl --profile="$REPO_ROOT/texlive/texlive.profile"
+  cd "$REPO_ROOT"
 fi
 
-# Just including texlua so the cache check above works
-tlmgr install luatex
+# Ensure tlmgr uses a sensible CTAN mirror
+tlmgr option repository "https://mirror.ctan.org/systems/texlive/tlnet"
 
-# Install package to install packages automatically
-tlmgr install texliveonfly
+# Install core tools you rely on
+tlmgr install latexmk luatex texliveonfly \
+  collection-langeuropean collection-fontsrecommended
 
-# Install babel languages manually, texliveonfly does't understand the babel error message
-tlmgr install collection-langeuropean
+# Install your explicit package list (strip blank lines/comments/CRLF)
+PACKAGES_FILE="$REPO_ROOT/texlive/texlive_packages"
+sed -i 's/\r$//' "$PACKAGES_FILE"
 
-# Common fonts with hard to debug errors if not found
-tlmgr install collection-fontsrecommended
+awk 'NF && $1 !~ /^#/' "$PACKAGES_FILE" | xargs -r tlmgr install
 
-# In the case you have to install packages manually, you can use an index of packages like
-# http://ctan.mirrors.hoobly.com/systems/texlive/tlnet/archive/
-# Or better, check https://www.ctan.org/pkg/some-package to see in which TeX Live package it is contained.
+# Prove todonotes is actually available (fail fast if not)
+kpsewhich todonotes.sty >/dev/null
 
-# Then you can add one package per line in the texlive_packages file
-# We need to change the working directory before including a file
-cd "$(dirname "${BASH_SOURCE[0]}")"
-tlmgr install $(cat texlive_packages)
-
-# Keep no backups (not required, simply makes cache bigger)
+# Reduce cache size + keep TL up to date
 tlmgr option -- autobackup 0
-
-# Update the TL install but add nothing new
 tlmgr update --self --all --no-auto-install
+``
