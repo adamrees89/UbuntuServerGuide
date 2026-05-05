@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate pdfs 
         run: |
-              cd "$GITHUB_WORKSPACE/templates"
+              cd "$GITHUB_WORKSPACE"
               pdflatex 'Server Set ups.tex'
         
       - name: Commit and push PDFs
