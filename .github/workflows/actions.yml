@@ -12,16 +12,16 @@ jobs:
         uses: actions/checkout@v4
 
 
-      - name: Restore TeX Live cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            /tmp/texlive
-            ~/.texlive*
-            ~/.tlpkg
-          key: ${{ runner.os }}-texlive-${{ hashFiles('texlive/texlive_packages', 'texlive/texlive.profile') }}
-          restore-keys: |
-            ${{ runner.os }}-texlive-
+      # - name: Restore TeX Live cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       /tmp/texlive
+      #       ~/.texlive*
+      #       ~/.tlpkg
+      #     key: ${{ runner.os }}-texlive-${{ hashFiles('texlive/texlive_packages', 'texlive/texlive.profile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-texlive-
 
       - name: Install TeX Live prerequisites
         run: |

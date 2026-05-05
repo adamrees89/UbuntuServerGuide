@@ -22,7 +22,10 @@ if ! command -v texlua >/dev/null 2>&1; then
 fi
 
 # Ensure tlmgr uses a sensible CTAN mirror
-tlmgr option repository "https://mirror.ctan.org/systems/texlive/tlnet"
+tlmgr option repository "https://ctan.math.washington.edu/tex-archive/systems/texlive/tlnet"
+
+# Update tlmgr itself before installing packages
+tlmgr update --self
 
 # Install core tools you rely on
 tlmgr install latexmk luatex texliveonfly \
