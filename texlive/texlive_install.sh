@@ -46,7 +46,25 @@ tlmgr install latexmk luatex texliveonfly \
 PACKAGES_FILE="$REPO_ROOT/texlive/texlive_packages"
 sed -i 's/\r$//' "$PACKAGES_FILE"
 
-awk 'NF && $1 !~ /^#/' "$PACKAGES_FILE" | xargs -r tlmgr install
+# awk 'NF && $1 !~ /^#/' "$PACKAGES_FILE" | xargs -r tlmgr install
+
+while IFS= read -r pkg; do
+  # skip blanks/comments
+  [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
+
+  # strip CRLF and whitespace
+  pkg="${pkg//$'\r'/}"
+  pkg="$(echo "$pkg" | xargs)"
+
+  # check package exists in tlmgr database
+  if tlmgr info "$pkg" >/dev/null 2>&1; then
+    echo "Installing: $pkg"
+    tlmgr install "$pkg"
+  else
+    echo "Skipping unknown tlmgr package: $pkg"
+  fi
+done < "$PACKAGES_FILE"
+
 
 # Prove todonotes is actually available (fail fast if not)
 kpsewhich todonotes.sty >/dev/null
