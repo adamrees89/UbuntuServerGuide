@@ -1,75 +1,72 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Always run relative to repository root
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Determine repo root from script location
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$REPO_ROOT"
 
-export TEXLIVE_DIR="/tmp/texlive"
-export PATH="$TEXLIVE_DIR/bin/x86_64-linux:$PATH"
+TEXLIVE_DIR="/tmp/texlive"
+TLBIN="$TEXLIVE_DIR/bin/x86_64-linux"
 
-# Install TeX Live if not present (cache-friendly)
+# If a TeX Live tree exists, check its year BEFORE doing anything else.
+if [[ -x "$TLBIN/tlmgr" ]]; then
+  INSTALLED_YEAR="$("$TLBIN/tlmgr" --version | awk '/TeX Live/ {print $NF; exit}')"
+  echo "Found existing TeX Live: $INSTALLED_YEAR at $TEXLIVE_DIR"
+
+  if [[ "$INSTALLED_YEAR" != "2026" ]]; then
+    echo "Removing mismatched TeX Live ($INSTALLED_YEAR) to avoid local/repo incompatibility..."
+    rm -rf "$TEXLIVE_DIR"
+  fi
+fi
+
+# Add TeX Live bin to PATH only after potential cleanup
+export PATH="$TLBIN:$PATH"
+
+# Install TeX Live 2026 if not present
 if ! command -v texlua >/dev/null 2>&1; then
-  echo "TeX Live not found in PATH, installing to $TEXLIVE_DIR"
+  echo "Installing TeX Live 2026 into $TEXLIVE_DIR"
 
   curl -L -o install-tl-unx.tar.gz \
     "https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
 
   tar -xzf install-tl-unx.tar.gz
   cd install-tl-20*/
-  ./install-tl -repository "https://mirror.ctan.org/systems/texlive/tlnet" --profile="$REPO_ROOT/texlive/texlive.profile"
+  ./install-tl -repository "https://mirror.ctan.org/systems/texlive/tlnet" \
+    --profile="$REPO_ROOT/texlive/texlive.profile"
   cd "$REPO_ROOT"
+
+  export PATH="$TLBIN:$PATH"
 fi
 
-# Mismatched Tree Guard
+# Pin repository (use one stable mirror; avoid auto-redirect churn)
+tlmgr option repository "https://mirror.ctan.org/systems/texlive/tlnet"
 
-if [ -x /tmp/texlive/bin/x86_64-linux/tlmgr ]; then
-  INSTALLED_YEAR="$(/tmp/texlive/bin/x86_64-linux/tlmgr --version | awk '/TeX Live/ {print $NF; exit}')"
-  if [ "$INSTALLED_YEAR" != "2026" ]; then
-    echo "Found TeX Live $INSTALLED_YEAR cached, removing to avoid cross-release mismatch."
-    rm -rf /tmp/texlive
-  fi
-fi
-
-
-# Ensure tlmgr uses a sensible CTAN mirror
-tlmgr option repository "https://ctan.math.washington.edu/tex-archive/systems/texlive/tlnet"
-
-# Update tlmgr itself before installing packages
+# Update tlmgr infra (safe; may be no-op)
 tlmgr update --self
 
-# Install core tools you rely on
-tlmgr install latexmk luatex texliveonfly \
-  collection-langeuropean collection-fontsrecommended
+# Core tools
+tlmgr install latexmk luatex
 
-# Install your explicit package list (strip blank lines/comments/CRLF)
+# Install from packages file safely
 PACKAGES_FILE="$REPO_ROOT/texlive/texlive_packages"
 sed -i 's/\r$//' "$PACKAGES_FILE"
 
-# awk 'NF && $1 !~ /^#/' "$PACKAGES_FILE" | xargs -r tlmgr install
-
 while IFS= read -r pkg; do
-  # skip blanks/comments
-  [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
-
-  # strip CRLF and whitespace
-  pkg="${pkg//$'\r'/}"
+  # Trim whitespace
   pkg="$(echo "$pkg" | xargs)"
+  # Skip blanks/comments
+  [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
 
-  # check package exists in tlmgr database
   if tlmgr info "$pkg" >/dev/null 2>&1; then
     echo "Installing: $pkg"
     tlmgr install "$pkg"
   else
-    echo "Skipping unknown tlmgr package: $pkg"
+    echo "Skipping unknown tlmgr package id: $pkg"
   fi
 done < "$PACKAGES_FILE"
 
+# Refresh filename database
+mktexlsr
 
-# Prove todonotes is actually available (fail fast if not)
-kpsewhich todonotes.sty >/dev/null
-
-# Reduce cache size + keep TL up to date
-tlmgr option -- autobackup 0
-tlmgr update --self --all --no-auto-install
-``
+# Optional sanity checks
+kpsewhich todonotes.sty >/dev/null || true
