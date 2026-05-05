@@ -17,9 +17,20 @@ if ! command -v texlua >/dev/null 2>&1; then
 
   tar -xzf install-tl-unx.tar.gz
   cd install-tl-20*/
-  ./install-tl --profile="$REPO_ROOT/texlive/texlive.profile"
+  ./install-tl -repository "https://mirror.ctan.org/systems/texlive/tlnet" --profile="$REPO_ROOT/texlive/texlive.profile"
   cd "$REPO_ROOT"
 fi
+
+# Mismatched Tree Guard
+
+if [ -x /tmp/texlive/bin/x86_64-linux/tlmgr ]; then
+  INSTALLED_YEAR="$(/tmp/texlive/bin/x86_64-linux/tlmgr --version | awk '/TeX Live/ {print $NF; exit}')"
+  if [ "$INSTALLED_YEAR" != "2026" ]; then
+    echo "Found TeX Live $INSTALLED_YEAR cached, removing to avoid cross-release mismatch."
+    rm -rf /tmp/texlive
+  fi
+fi
+
 
 # Ensure tlmgr uses a sensible CTAN mirror
 tlmgr option repository "https://ctan.math.washington.edu/tex-archive/systems/texlive/tlnet"
