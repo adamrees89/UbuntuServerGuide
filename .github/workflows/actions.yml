@@ -2,7 +2,7 @@ name: Build PDF from LaTeX
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
 
 jobs:
   build:
@@ -11,46 +11,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
-      - name: Restore TeX Live cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            /tmp/texlive
-            ~/.texlive*
-            ~/.tlpkg
-          key: ${{ runner.os }}-texlive-${{ hashFiles('texlive/texlive_packages', 'texlive/texlive.profile') }}
-          restore-keys: |
-            ${{ runner.os }}-texlive-
-
-      - name: Install TeX Live prerequisites
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y wget perl python3-pygments
-
-      - name: Install TeX Live packages
+      - name: Install TeX Live + packages
+        shell: bash
         run: |
           chmod +x texlive/texlive_install.sh
-          ./texlive/texlive_install.sh
-          echo "/tmp/texlive/bin/$(uname -m)-linux" >> $GITHUB_PATH
-      
-      - name: Check TeX Live installation
-        run: |
-          which pdflatex || true
-          pdflatex --version || true
-          tlmgr --version || true
-          tlmgr option repository || true
+          texlive/texlive_install.sh
 
-      - name: Generate pdfs 
+      - name: Build PDF
+        shell: bash
         run: |
-              cd "$GITHUB_WORKSPACE"
-              latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error "Server Set ups.tex"
-        
-      - name: Commit and push PDFs
-        run: |
-              git config --global user.name 'GitHub Actions'
-              git config --global user.email 'actions@github.com'
-              git add templates/*.pdf
-              git commit -m "Update generated PDFs" || echo "No changes to commit"
-              git push
+          export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
+          latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error "Server Set ups.tex"
 
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UbuntuServerGuide-PDF
+          path: "*.pdf"
