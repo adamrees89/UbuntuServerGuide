@@ -52,7 +52,6 @@ tlmgr --version
 
 # Pin repo (avoid mirror churn)
 tlmgr option repository "${REPO_URL}"
-tlmgr update --self
 
 # Install core tools
 tlmgr install latexmk luatex
