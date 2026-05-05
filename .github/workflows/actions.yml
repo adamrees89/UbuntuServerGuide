@@ -18,7 +18,7 @@ jobs:
               
       - name: Generate pdfs 
         run: |
-              cd /home/runner/work/repo/repo/templats
+              cd "$GITHUB_WORKSPACE/templates"
               pdflatex 'Server Set ups.tex'
         
       - name: Commit and push PDFs
