@@ -1,15 +1,28 @@
 name: Build PDF from LaTeX
 
 on:
-  push:
-    branches: [ master ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write          # required to push commits
+  pull-requests: read
+
+concurrency:
+  group: pdf-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Checkout the PR source branch so we can push to it
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
     
       - name: Cache TeX Live installation
         uses: actions/cache@v4
@@ -30,24 +43,34 @@ jobs:
         run: |
           export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
           latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error "Server Set ups.tex"
-
-      - name: Commit PDF to a new branch
+          
+        
+      - name: Commit PDF back to PR branch
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b pdf-update-${GITHUB_RUN_ID}
-          git add "Server Set ups.pdf"
-          git commit -m "Auto-update PDF [skip ci]" || echo "No changes to commit"
-          git push origin pdf-update-${GITHUB_RUN_ID}
+            set -e
+  
+            # Make sure we’re on the PR branch
+            echo "On branch: $(git branch --show-current)"
+  
+            # Add the built PDF
+            git add "Server Set ups.pdf"
+  
+            # If nothing changed, exit gracefully
+            if git diff --cached --quiet; then
+              echo "No PDF changes to commit."
+              exit 0
+            fi
+  
+            # Configure bot identity
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+  
+            # Commit with a message that can be used to skip other workflows if needed
+            git commit -m "chore(pdf): update generated PDF [skip ci]"
+  
+            # Push back to the PR branch
+            git push origin HEAD:${{ github.head_ref }}
 
 
-      - name: Create Pull Request for PDF update
-        uses: peter-evans/create-pull-request@v5
-        with:
-          branch: pdf-update-${{ github.run_id }}
-          title: "Auto-update PDF"
-          body: "This PR was created automatically by GitHub Actions to update the PDF."
-          commit-message: "Auto-update PDF [skip ci]"
-          author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
 
 
