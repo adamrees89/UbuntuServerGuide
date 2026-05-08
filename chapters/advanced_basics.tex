@@ -5,6 +5,38 @@
 
 In this section you will find all the topics that I have not really needed until later on, or when setting up more advanced servers, i.e. those with RAID, multiple hard drives etc.
 
+\section{Git and Version Control}
+\label{sec:git}
+
+\todo[inline,color=blue!40]{Describe how to use git for version control of files on the server, and how to use it with github in this section.}
+
+\subsection{Install Git}
+\label{ssec:git_install}
+
+To install git on your server simply run the following command;
+
+\begin{lstlisting}
+sudo apt install git
+\end{lstlisting}
+
+\subsection{Github}
+\label{ssec:github}
+
+To setup your linux server to work with github, you need to generate a ssh key pair on your server and then add the public key to your github account.  To generate the ssh key pair simply run the following command;
+
+\begin{lstlisting}
+ssh-keygen -t ed25519 -C "your.email@example.com"
+\end{lstlisting}
+
+This will generate a public and private key pair in the $/home/username/.ssh$ directory.  The public key is the one with the .pub extension, so in this case it would be $id\_rsa.pub$.  To add this to your github account simply copy the contents of the file and add it to your github account under settings, ssh keys.
+
+Now we need to configure git on our server, we can do this by running the following commands;
+
+\begin{lstlisting}
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+\end{lstlisting}
+
 \section{Mounting Windows/Samba Shares}
 \label{sec:mount_samba}
 
