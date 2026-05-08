@@ -129,7 +129,7 @@ watch sensors
 \section{Monitoring Network Traffic}
 \label{sec:netmon}
 
-This section will outline some of the basic methods for monitoring network traffic on your LAN. For monitoring network traffic on your servr, please refer to Section~\ref{sec:monitoring}. This section is useful for checking if there are unusual devices on your home network.
+This section will outline some of the basic methods for monitoring network traffic on your LAN. For monitoring network traffic on your server, please refer to Section~\ref{sec:monitoring}. This section is useful for checking if there are unusual devices on your home network.
 
 \subsection{nmap}
 \label{sec:nmap}
@@ -143,7 +143,7 @@ sudo apt-get install nmap
 To scan your network for devices simply run the following command;
 
 \begin{lstlisting}
-nmap -sn
+nmap -sn 192.168.1.0/24
 \end{lstlisting}
 
 This will give you a list of all the devices on your network, along with their IP addresses and MAC addresses.  You can also use nmap to scan for open ports on a specific device, simply run the following command;
@@ -171,7 +171,6 @@ Option & Description\\
 \label{tab:nmap}
 \end{table}
 
-\subsection{iftop}
 
 \section{Symbolic Links and bind mounts}
 \label{sec:symlink}
