@@ -12,13 +12,94 @@ This entire guide assumes that you have a fresh install of Ubuntu. This chapter 
 
 \todo[inline,color=blue!40]{Write about sudo + apt-get}
 
-\subsection{Apt-get} 
+\subsection{Apt and apt-get} 
+\label{ssec:apt}
 
+Apt is short for \textit{Advanced Package Tool}, it is a command line program for installing, removing and managing software on your system.  It is a front end to the dpkg package manager, and is used to install packages from the repositories. Generally, apt is used for interactive use, and apt-get is used for scripting.  The syntax is simple, to install a package simply type;
 
+\begin{lstlisting}
+sudo apt install PACKAGE
+\end{lstlisting}
+
+To remove a package type;
+
+\begin{lstlisting}
+sudo apt remove PACKAGE
+\end{lstlisting}
+
+One general maintenance task is to update and upgrade the system, this is done by running the following two commands;
+
+\begin{lstlisting}
+sudo apt update
+sudo apt upgrade
+\end{lstlisting}
+
+Which can be run in one line using;
+
+\begin{lstlisting}
+sudo apt update && sudo apt upgrade -y 
+\end{lstlisting}
+
+Apt command line options are shown in table~\ref{tab:apt}.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-y & Assume yes to all prompts and run non-interactively\\
+--no-install-recommends & Do not install recommended packages\\
+--no-install-suggests & Do not install suggested packages\\
+--only-upgrade & Only upgrade the package, do not install if not already installed\\
+--allow-downgrades & Allow downgrading of packages\\
+--allow-remove-essential & Allow removing of essential packages\\
+--allow-change-held-packages & Allow changes to held packages\\
+\hline
+\end{tabular}
+\caption{Table of apt options}
+\label{tab:apt}
+\end{table}
 
 \subsection{Shutting Down and Rebooting}
+\label{ssec:shutdown}
 
+To shutdown or reboot the system from the command line simply type;
 
+\begin{lstlisting}
+sudo shutdown -h now
+\end{lstlisting}
+
+to shutdown immediately, or
+
+\begin{lstlisting}
+sudo shutdown -r now
+\end{lstlisting}
+
+to reboot immediately.  You can also specify a time to shutdown or reboot, for example to shutdown in 30 minutes type;
+
+\begin{lstlisting}
+sudo shutdown -h +30
+\end{lstlisting}
+
+Command line options for shutdown are shown in table~\ref{tab:shutdown}.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-h & Halt the system\\
+-r & Reboot the system\\
+-P & Power off the system\\
+-t & Set the time to shutdown or reboot (e.g. +30 for 30 minutes)\\
+-c & Cancel a scheduled shutdown or reboot\\
+\hline
+\end{tabular}
+\caption{Table of shutdown options}
+\label{tab:shutdown}
+\end{table}
 
 \subsection{Other Commands}
 
