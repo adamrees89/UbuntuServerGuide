@@ -8,12 +8,12 @@ So there are two ways to uninstall any program such as the ones we installed in 
 
 The first;
 \begin{lstlisting}
-sudo apt-get remove [PROGRAM]
+sudo apt remove [PROGRAM]
 \end{lstlisting}
 
 and the second;
 \begin{lstlisting}
-sudo apt-get purge [PROGRAM]
+sudo apt purge [PROGRAM]
 \end{lstlisting}
 
 Now they basically do the same thing, with the exception that the purge command also removes the configuration files associated with the program, freeing up more space.  However this means that you have to completely re-configure any software that you have purged if you re-install it.
