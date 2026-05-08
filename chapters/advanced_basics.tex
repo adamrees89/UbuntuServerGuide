@@ -126,6 +126,53 @@ watch sensors
 \end{lstlisting}
 
 
+\section{Monitoring Network Traffic}
+\label{sec:netmon}
+
+This section will outline some of the basic methods for monitoring network traffic on your LAN. For monitoring network traffic on your servr, please refer to Section~\ref{sec:monitoring}. This section is useful for checking if there are unusual devices on your home network.
+
+\subsection{nmap}
+\label{sec:nmap}
+
+nmap, short for network mapper, is a powerful tool for scanning your network and finding out what devices are connected to it.  To install nmap simply run the following command;
+
+\begin{lstlisting}
+sudo apt-get install nmap
+\end{lstlisting}
+
+To scan your network for devices simply run the following command;
+
+\begin{lstlisting}
+nmap -sn
+\end{lstlisting}
+
+This will give you a list of all the devices on your network, along with their IP addresses and MAC addresses.  You can also use nmap to scan for open ports on a specific device, simply run the following command;
+
+\begin{lstlisting}
+nmap -p- IP_ADDRESS
+\end{lstlisting}
+
+nmap has a large number of options and can be used for a variety of purposes, I would recommend reading the nmap documentation for more information on how to use it effectively. A short table of some of the most useful options is shown in Table~\ref{tab:nmap}.
+
+\begin{table}[!th]
+\centering
+\begin{tabular}{cc}
+\hline
+Option & Description\\
+\hline
+-sS & TCP SYN scan\\
+-sU & UDP scan\\
+-sV & Version detection\\
+-O & OS detection\\
+-A & Aggressive scan\\
+\hline
+\end{tabular}
+\caption{Table of nmap options}
+\label{tab:nmap}
+\end{table}
+
+\subsection{iftop}
+
 \section{Symbolic Links and bind mounts}
 \label{sec:symlink}
 
@@ -135,7 +182,7 @@ Symbolic links and bind mounts are similar to a short-cut in Windows.  From the 
 
 but for simplicity I want to link a folder in my home directory to this folder so I can get to it quicker... So I want it here;
 
-\menu[,]{home,adam,scripts}
+\menu[,]{home,user,scripts}
 
 \subsection{Symbolic Links}
 
@@ -173,7 +220,6 @@ This works but will the link be deleted on system restart. To get a persistent l
 \end{lstlisting}
 
 \section{Software RAID - \textit{INCOMPLETE}}
-
 
 
 \section{Unattended Upgrades}
