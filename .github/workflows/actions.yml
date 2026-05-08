@@ -25,9 +25,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/texlive
-          key: texlive-2026-${{ hashFiles('texlive/texlive.profile', 'texlive/texlive_packages') }}
-          restore-keys: |
-            texlive-2026-
+          key: ${{ runner.os }}texlive-2026
 
       - name: Install TeX Live + packages
         shell: bash
