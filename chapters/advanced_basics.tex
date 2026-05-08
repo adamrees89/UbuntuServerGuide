@@ -143,16 +143,20 @@ sudo apt-get install nmap
 To scan your network for devices simply run the following command;
 
 \begin{lstlisting}
-nmap -sn 192.168.1.0/24
+sudo nmap -sn 192.168.1.0/24
 \end{lstlisting}
 
 This will give you a list of all the devices on your network, along with their IP addresses and MAC addresses.  You can also use nmap to scan for open ports on a specific device, simply run the following command;
 
 \begin{lstlisting}
-nmap -p- IP_ADDRESS
+sudo nmap -p- IP_ADDRESS
 \end{lstlisting}
 
 nmap has a large number of options and can be used for a variety of purposes, I would recommend reading the nmap documentation for more information on how to use it effectively. A short table of some of the most useful options is shown in Table~\ref{tab:nmap}.
+
+\textit{Note} - nmap is a powerful tool and can be used for malicious purposes, so please use it responsibly and only on networks that you own or have permission to scan.
+
+\textit{Note} - the commands below must be run with root privileges, so you may need to add \textbf{sudo} to the beginning of the commands.
 
 \begin{table}[!th]
 \centering
