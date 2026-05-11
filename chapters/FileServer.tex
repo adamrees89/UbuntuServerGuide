@@ -68,11 +68,10 @@ In the configuration file, we will need to add a new section for our Samba share
     valid users = user
     read only = no
     browsable = yes
-    public = yes
     writable = yes
 \end{lstlisting}
 
-This configuration will create a Samba share called "Shared" that points to the directory \texttt{/home/user/shared}. The share will be available to the user "user", and it will allow read and write access. The share will also be browsable and public, meaning that it can be accessed by anyone on the network.
+This configuration will create a Samba share called "Shared" that points to the directory \texttt{/home/user/shared}. The share will be restricted to the user "user" with read and write access. The share will also be browsable.
 
 After making the necessary changes to the configuration file, we need to restart the Samba service to apply the changes:
 \begin{lstlisting}
@@ -101,16 +100,13 @@ sudo apt-get install vsftpd
 
 Now there are two ways of configuring the ftp server, Anonymous or User Authenticated.
 
-Anonymous is good when your server is only accessible from within your LAN, this is the default setting when the server is installed.  A FTP user is created and the default upload location is
-$$
-/home/ftp
-$$
+Anonymous is good when your server is only accessible from within your LAN, this is the default setting when the server is installed.  A FTP user is created and the default upload location is \texttt{/home/ftp}.
 
 However I prefer the User Authenticated version in which the user logs in with their own user name on the server and uploads to their home directory.  Both installation procedures are shown in this section.
 
 \subsection{User Authenticated}
 
-To enable the server to authenticate the FTP users before allowing access, then open $$/etc/vsftpd.conf$$ using nano.
+To enable the server to authenticate the FTP users before allowing access, then open \texttt{/etc/vsftpd.conf} using nano.
 
 Change the following;
 
@@ -122,7 +118,7 @@ write_enable=YES
 Restart the FTP server by running
 
 \begin{lstlisting}
-sudo /etc/init.d/vsftpd restart
+sudo systemctl restart vsftpd
 \end{lstlisting}
 
 The configuration to this point will allow users of the server to log in and upload files, however to secure the FTP server further we can restrict users to their home directories by uncommenting the line;
@@ -146,11 +142,11 @@ sudo nano /etc/vsftpd.chroot_list
 
 Will create the file which restricts users to their home directory, simply add usernames one per line.
 
-Also $$ /etc/ftpusers $$ is a list of users that are disallowed FTP access.
+Also \texttt{/etc/ftpusers} is a list of users that are disallowed FTP access.
 
-The server can be further secured with a SSL certificate, read this web page; \href{https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}{Certificates}\footnote{For thos who can not click - https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}
+The server can be further secured with a SSL certificate, read this web page; \href{https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}{Certificates}\footnote{For those who cannot click - https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}
 
-To enable secure FTP (FTPS) then add the following line to the bottom of $$/etc/vsftpd.conf$$
+To enable secure FTP (FTPS) then add the following line to the bottom of \texttt{/etc/vsftpd.conf}
 
 \begin{lstlisting}
 ssl_enable=Yes
@@ -165,12 +161,9 @@ rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
 
 \subsection{Anonymous}
 
-This is the default configuration, and the uploaded files are available in 
-$$
-/home/ftp
-$$
+This is the default configuration, and the uploaded files are available in \texttt{/home/ftp}.
 
-However to change the default directory to $$/srv/ftp$$ for example then simply change the FTP users home directory;
+However to change the default directory to \texttt{/srv/ftp} for example then simply change the FTP users home directory;
 
 \begin{lstlisting}
 sudo mkdir /srv/ftp
@@ -180,5 +173,5 @@ sudo usermod -d /srv/ftp ftp
 Then restart the FTP service;
 
 \begin{lstlisting}
-sudo /etc/init.d/vsftpd restart
+sudo systemctl restart vsftpd
 \end{lstlisting}
