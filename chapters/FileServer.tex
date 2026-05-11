@@ -1,0 +1,184 @@
+\chapter{File Server}
+\label{chp:fileserver}
+
+\section{Samba, NFS, FTP, SFTP, or CIFS}
+\label{sec:fileserver:protocols}
+There are many different protocols that can be used to share files across a network, some of the most common ones include:
+
+\begin{itemize}
+    \item Samba (SMB/CIFS): A popular protocol for sharing files and printers between Windows and Linux/Unix systems.
+    \item NFS (Network File System): A protocol used primarily in Unix/Linux environments for sharing files over a network.
+    \item FTP (File Transfer Protocol): A standard network protocol used for transferring files between a client and server on a computer network.
+    \item SFTP (SSH File Transfer Protocol): A secure version of FTP that uses SSH to encrypt the data being transferred.
+    \item CIFS (Common Internet File System): A protocol that allows file sharing over a network, similar to SMB, but with some differences in implementation.
+\end{itemize}
+
+Some of the considerations when choosing a protocol include:
+
+\begin{itemize}
+    \item Compatibility: Ensure that the protocol is supported by all the devices and operating systems that will be accessing the shared files.
+    \item Security: Consider the security features of the protocol, such as encryption and authentication mechanisms, to protect sensitive data.
+    \item Performance: Evaluate the performance of the protocol, especially if you will be transferring large files or have a high volume of traffic.
+    \item Ease of Use: Consider how easy it is to set up and manage the file sharing using the chosen protocol.
+\end{itemize}
+
+One of the main considerations when choosing a protocol is the operating systems that will be accessing the shared files. For example, if you have a mix of Windows and Linux/Unix systems, Samba (SMB/CIFS) may be a good choice as it is widely supported across different platforms. On the other hand, if you are primarily using Unix/Linux systems, NFS may be a better option. FTP and SFTP are commonly used for transferring files over the internet, but they may not be the best choice for local file sharing due to security concerns. CIFS is similar to SMB but may have some differences in implementation, so it is important to consider the specific requirements of your network and devices when choosing a protocol for file sharing. CIFS is also an older protocol and may not be as widely supported as SMB, so it is important to check compatibility with your devices before choosing CIFS for file sharing. Ultimately, the choice of protocol will depend on your specific needs and the requirements of your network and devices.
+
+For my needs, I will be using Samba (SMB/CIFS) as it is widely supported across different platforms and allows for easy file sharing between Windows and Linux/Unix systems which I have on my network. Samba also provides good security features and is relatively easy to set up and manage, making it a suitable choice for my file sharing needs.
+
+\section{Samba Installation}
+\label{sec:samba:install}
+
+So we need to install some software before we can use samba to share our files,  run the following from the terminal:
+
+\begin{lstlisting}
+sudo apt-get install samba samba-common-bin
+\end{lstlisting}
+
+This will install the Samba server and some common utilities that we will need to manage our Samba shares. Once the installation is complete, we can proceed to configure Samba to share our files.
+
+We can check if the Samba service is running by using the following command:
+\begin{lstlisting}
+sudo systemctl status smbd
+\end{lstlisting}
+
+This will show us the status of the Samba daemon (smbd) and confirm that it is running properly. If it is not running, we can start it using the following command:
+\begin{lstlisting}
+sudo systemctl start smbd
+\end{lstlisting}
+
+\section{Samba Configuration}
+\label{sec:samba:config}
+
+The main configuration file for Samba is located at \texttt{/etc/samba/smb.conf}. We will need to edit this file to set up our Samba shares. Before making any changes, it is a good idea to create a backup of the original configuration file:
+\begin{lstlisting}
+sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+\end{lstlisting}
+
+Now we can open the configuration file in a text editor:
+\begin{lstlisting}
+sudo nano /etc/samba/smb.conf
+\end{lstlisting}
+
+In the configuration file, we will need to add a new section for our Samba share. For example, if we want to share a directory called \texttt{/home/user/shared}, we can add the following section to the end of the configuration file:
+\begin{lstlisting}
+[Shared]
+    path = /home/user/shared
+    available = yes
+    valid users = user
+    read only = no
+    browsable = yes
+    public = yes
+    writable = yes
+\end{lstlisting}
+
+This configuration will create a Samba share called "Shared" that points to the directory \texttt{/home/user/shared}. The share will be available to the user "user", and it will allow read and write access. The share will also be browsable and public, meaning that it can be accessed by anyone on the network.
+
+After making the necessary changes to the configuration file, we need to restart the Samba service to apply the changes:
+\begin{lstlisting}
+sudo systemctl restart smbd
+\end{lstlisting}
+
+Now we should be able to access the Samba share from other devices on the network. On a Windows machine, you can open File Explorer and enter the following in the address bar:
+\begin{lstlisting}
+\\<IP_ADDRESS>\Shared
+\end{lstlisting}
+
+Replace \texttt{<IP_ADDRESS>} with the actual IP address of the machine running the Samba server. You should see the contents of the shared directory and be able to read and write files as needed.
+
+Samba servers can be configured to run as a domain controller, allowing for centralized authentication and management of users and groups. This can be useful in larger networks where there are multiple users and devices that need to access shared resources. By setting up Samba as a domain controller, you can manage user accounts and permissions from a central location, making it easier to maintain security and control access to shared files and printers. To set up Samba as a domain controller, you will need to configure the Samba server to use the appropriate settings for your network and domain. This typically involves setting up a domain name, creating user accounts, and configuring the necessary permissions for accessing shared resources. It is important to follow best practices for security when setting up a Samba domain controller, such as using strong passwords and limiting access to sensitive data.
+
+\section{FTP Server}
+\label{sec:ftp}
+
+This is a good way of getting files to your machine without using Dropbox, which does not work unless you are logged in...
+
+\textbf{vsftpd} is an FTP daemon available in Ubuntu. It is easy to install, set up, and maintain. Run the following command:
+
+\begin{lstlisting}
+sudo apt-get install vsftpd
+\end{lstlisting}
+
+Now there are two ways of configuring the ftp server, Anonymous or User Authenticated.
+
+Anonymous is good when your server is only accessible from within your LAN, this is the default setting when the server is installed.  A FTP user is created and the default upload location is
+$$
+/home/ftp
+$$
+
+However I prefer the User Authenticated version in which the user logs in with their own user name on the server and uploads to their home directory.  Both installation procedures are shown in this section.
+
+\subsection{User Authenticated}
+
+To enable the server to authenticate the FTP users before allowing access, then open $$/etc/vsftpd.conf$$ using nano.
+
+Change the following;
+
+\begin{lstlisting}
+local_enable=YES
+write_enable=YES
+\end{lstlisting}
+
+Restart the FTP server by running
+
+\begin{lstlisting}
+sudo /etc/init.d/vsftpd restart
+\end{lstlisting}
+
+The configuration to this point will allow users of the server to log in and upload files, however to secure the FTP server further we can restrict users to their home directories by uncommenting the line;
+
+\begin{lstlisting}
+chroot_local_user=YES
+\end{lstlisting}
+
+Or even restrict certain users to their home directory by uncommenting;
+
+\begin{lstlisting}
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd.chroot_list
+\end{lstlisting}
+
+Running the command;
+
+\begin{lstlisting}
+sudo nano /etc/vsftpd.chroot_list
+\end{lstlisting}
+
+Will create the file which restricts users to their home directory, simply add usernames one per line.
+
+Also $$ /etc/ftpusers $$ is a list of users that are disallowed FTP access.
+
+The server can be further secured with a SSL certificate, read this web page; \href{https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}{Certificates}\footnote{For thos who can not click - https://help.ubuntu.com/10.04/serverguide/certificates-and-security.html}
+
+To enable secure FTP (FTPS) then add the following line to the bottom of $$/etc/vsftpd.conf$$
+
+\begin{lstlisting}
+ssl_enable=Yes
+\end{lstlisting}
+
+Notice the key and certificate related options;
+
+\begin{lstlisting}
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+\end{lstlisting}
+
+\subsection{Anonymous}
+
+This is the default configuration, and the uploaded files are available in 
+$$
+/home/ftp
+$$
+
+However to change the default directory to $$/srv/ftp$$ for example then simply change the FTP users home directory;
+
+\begin{lstlisting}
+sudo mkdir /srv/ftp
+sudo usermod -d /srv/ftp ftp 
+\end{lstlisting}
+
+Then restart the FTP service;
+
+\begin{lstlisting}
+sudo /etc/init.d/vsftpd restart
+\end{lstlisting}
