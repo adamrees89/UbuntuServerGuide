@@ -12,6 +12,7 @@ fancyhdr
 float
 framed
 geometry
+glossaries
 graphics
 hyperref
 imakeidx
