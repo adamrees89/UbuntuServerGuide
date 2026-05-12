@@ -79,9 +79,8 @@ sudo systemctl restart smbd
 \end{lstlisting}
 
 Now we should be able to access the Samba share from other devices on the network. On a Windows machine, you can open File Explorer and enter the following in the address bar:
-\begin{lstlisting}
-\\IP_ADDRESS\Shared
-\end{lstlisting}
+
+\path{\\IP_ADDRESS\Shared}
 
 Replace \texttt{IP_ADDRESS} with the actual IP address of the machine running the Samba server. You should see the contents of the shared directory and be able to read and write files as needed.
 
