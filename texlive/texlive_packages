@@ -1,6 +1,7 @@
 adjustbox
 amsfonts
 amsmath
+array
 booktabs
 caption
 chemfig
@@ -12,6 +13,7 @@ fancyhdr
 float
 framed
 geometry
+glossaries
 graphics
 hyperref
 imakeidx
@@ -20,12 +22,15 @@ listings
 mathtools
 menukeys
 multirow
+nameref
 pdfpages
 pgf
 pgfplots
 relsize
 setspace
+tikz
 todonotes
+url
 url
 xcolor
 xstring
