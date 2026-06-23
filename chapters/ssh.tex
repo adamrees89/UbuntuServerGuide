@@ -200,8 +200,8 @@ The order that openssh processes these directives is as follows;
 This is very useful for closing unused ssh connections, simply add the following two lines to the end of your config file;\
 
 \begin{verbatim}
-ClientAliveInterval 180
-ClientAliveCountMax 0
+ClientAliveInterval 300
+ClientAliveCountMax 2
 \end{verbatim}
 
 This tells the server to log out any clients that have been inactive for the last half an hour.
@@ -222,9 +222,50 @@ This is somewhat a polarising point, but better safe than sorry, don't let the r
 PermitrootLogin no
 \end{verbatim}
 
+\subsubsection{Disable X11 Forwarding}
+
+X11 connections are a graphical interface that can be forwarded over ssh, servers typically don't need GUI's so if you don't need it then disable it. 
+If you do need it, then make sure that you have a firewall in place to protect your server from the internet. 
+
+\begin{verbatim}
+X11Forwarding no
+\end{verbatim}
+
+\subsubsection{Disable TCP Forwarding}
+
+TCP forwarding allows the server to forward TCP connections to other servers, which can be a security risk if the server is compromised.
+
+\begin{verbatim}
+AllowTcpForwarding no
+\end{verbatim}
+
+\subsubsection{Disable Agent Forwarding}
+
+Agent forwarding allows the server to forward the authentication agent connection to other servers, which can be a security risk if the server is compromised.
+
+\begin{verbatim}
+AllowAgentForwarding no
+\end{verbatim}
+
+\subsubsection{Login Grace Time}
+
+Login grace time is the amount of time that the server will wait for a user to successfully log in before disconnecting.  This is useful for preventing brute force attacks.
+
+\begin{verbatim}
+LoginGraceTime 30
+\end{verbatim}
+
+\subsubsection{Max Auth Tries}
+
+Maximum authentication attempts is the number of times that a user can attempt to log in before being disconnected.  This is useful for preventing brute force attacks.
+
+\begin{verbatim}
+MaxAuthTries 3
+\end{verbatim}
+
 \subsubsection{Updates}
 
-Just make sure that you constantly update your ssh server instance, use \textit{apt-get}.
+Just make sure that you constantly update your ssh server instance, use \textit{apt-get or apt} (See~\autoref{ssec:apt}).
 
 
 \section{Running Scripts after Login}
