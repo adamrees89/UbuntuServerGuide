@@ -78,23 +78,23 @@ SSH keys allow authentication between two hosts without the need of a password. 
 To generate the keys, from a terminal prompt enter:
 
 \begin{lstlisting}
-ssh-keygen -t dsa
+ssh-keygen -t rsa
 \end{lstlisting}
 
-This will generate the keys using a DSA authentication identity of the user. During the process you will be prompted for a password. Simply hit Enter when prompted to create the key.
+This will generate the keys using a RSA authentication identity of the user. During the process you will be prompted for a password. Simply hit Enter when prompted to create the key.
 
 By default the public key is saved in the file
 $$
- ~/.ssh/id\_dsa.pub
+ ~/.ssh/id\_rsa.pub
 $$
 
 and
 $$
- ~/.ssh/id\_dsa
 $$
+~/.ssh/id\_rsa
 
-is the private key. Now copy the $id\_dsa$ file to the client, then append $id\_dsa.pub$ to;
-
+is the private key. Now copy the $id\_rsa$ file to the client, then append $id\_rsa.pub$ to;
+rsa
 $$
 ~/.ssh/authorized\_keys
 $$
@@ -102,10 +102,10 @@ $$
 by running the following command;
 
 \begin{lstlisting}
-cat id_dsa.pub >> .ssh/authorized_keys
+cat id_rsa.pub >> .ssh/authorized_keys
 \end{lstlisting}
 
-However if the computer is a fresh installation, then you can simply change the name of the $id\_dsa.pub$ file to $authroized\_keys$.
+However if the computer is a fresh installation, then you can simply change the name of the $id\_rsa.pub$ file to $authroized\_keys$.
 
 Now open the config file, running the command;
 
