@@ -14,3 +14,18 @@ To install Ansible, you can use the package manager for your operating system. O
 sudo apt update
 sudo apt install ansible
 \end{lstlisting}
+
+\section{SSH Keys}
+\label{sec:Ansible-ssh-keys}
+
+Contrary to the SSH best practices, some of which are shown in~\autoref{sec:sshkeys}, when using Ansible, it is common to generate a single key pair, then copy the \textbf{public key} to all the servers you want to manage. This allows for easier management of multiple servers whilst limiting the amount of key management required. As always, the private key should be kept secure and not shared as this will compromise the security of the entire network.
+
+The procedure for generating a key pair is covered in~\autoref{sec:sshkeys}. Once you have generated your key pair, you can copy the public key to your servers using the following command:
+
+\begin{lstlisting}[language=bash]
+ssh-copy-id user@server_ip
+\end{lstlisting}
+
+This will add the public key to the \texttt{~/.ssh/authorized\_keys} file on the server, allowing you to log in without a password. You will need to repeat this process for each server you want to manage with Ansible.
+
+Alternatively, the public key can be copied to each server using Ansible but that is not covered in this guide. The method described above is the most common and straightforward way to set up SSH key-based authentication for Ansible.
